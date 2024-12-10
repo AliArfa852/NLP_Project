@@ -1,6 +1,6 @@
-# src/response_generation.py
 import requests
 import yaml
+import json
 
 def load_config(config_path='config/config.yaml'):
     """Load configuration settings from a YAML file."""
@@ -14,31 +14,6 @@ class ResponseGenerator:
         self.model_name = config['llm']['model_name']
         self.api_endpoint = f"{config['ollama']['api_url']}/generate"
 
-    # def generate_response(self, user_input, emotions):
-    #     """Generate a response using the Ollama API based on user input and detected emotions."""
-    #     # Create a prompt based on detected emotions
-    #     emotion_labels = [e['label'] for e in emotions]
-    #     prompt = (
-    #         f"User said: '{user_input}'.\n"
-    #         f"Detected emotions: {', '.join(emotion_labels)}.\n"
-    #         f"Generate a considerate and appropriate response in Roman Urdu reflecting the detected emotions."
-    #     )
-
-    #     # Payload for the Ollama API
-    #     payload = {
-    #         "model": self.model_name,
-    #         "prompt": prompt
-    #     }
-
-    #     # Send request to the Ollama API
-    #     response = requests.post(self.api_endpoint, json=payload)
-        
-    #     # Handle response
-    #     if response.status_code == 200:
-    #         return response.json().get('content', '').strip()
-    #     else:
-    #         raise Exception(f"Error in generating response: {response.text}")
-
     def generate_response(self, user_input, emotions):
         """Generate a response using the Ollama API based on user input and detected emotions."""
         # Create a prompt based on detected emotions
@@ -46,7 +21,7 @@ class ResponseGenerator:
         prompt = (
             f"User said: '{user_input}'.\n"
             f"Detected emotions: {', '.join(emotion_labels)}.\n"
-            f"Generate a considerate and appropriate response in Roman Urdu reflecting the detected emotions."
+            f"Generate a considerate and appropriate response in Roman_Urdu reflecting the detected emotions."
         )
 
         # Payload for the Ollama API
@@ -56,20 +31,22 @@ class ResponseGenerator:
         }
 
         # Send request to the Ollama API
-        response = requests.post(self.api_endpoint, json=payload)
+        response = requests.post(self.api_endpoint, json=payload, stream=True)
         
-        # Log the raw response text
-        print(f"Raw response text:\n{response.text}")
-        
-        # Handle response
-        if response.status_code == 200:
-            try:
-                return response.json().get('content', '').strip()
-            except ValueError as e:
-                raise Exception(f"Failed to parse JSON: {e}\nRaw response: {response.text}")
-        else:
-            raise Exception(f"Error in generating response: {response.text}")
+        # Handle streamed response
+        complete_response = ""
+        for line in response.iter_lines(decode_unicode=True):
+            if line.strip():  # Skip empty lines
+                try:
+                    json_data = json.loads(line)
+                    if "response" in json_data:
+                        complete_response += json_data["response"]
+                    if json_data.get("done", False):  # Stop if "done" is true
+                        break
+                except json.JSONDecodeError as e:
+                    raise Exception(f"Failed to parse JSON line: {line}\nError: {e}")
 
+        return complete_response.strip()
 
 if __name__ == "__main__":
     # Example usage

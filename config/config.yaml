@@ -23,7 +23,10 @@ rl:
 # Data Configuration
 
 llm:
-  model_name: "llama3.2:1b"
+  model_name: "llama3.2"
+  # model_name: "gemma:2b"
+  #model_name: "llama3.2:1b"
+
 
 ollama:
   api_url: "http://127.0.0.1:11434/api"
