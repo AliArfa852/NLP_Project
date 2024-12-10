@@ -26,7 +26,7 @@ llm:
   model_name: "llama3.2:1b"
 
 ollama:
-  api_url: "http://localhost:11434/api"
+  api_url: "http://127.0.0.1:11434/api"
 
 data:
   raw_data_path: "data/RU-EN-Emotion Dataset.xlsx"
