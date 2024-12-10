@@ -1,0 +1,27 @@
+# Data Processing
+pandas
+numpy
+
+# Machine Learning
+torch
+transformers
+
+# Reinforcement Learning
+stable-baselines3
+
+# MongoDB
+pymongo
+
+# Web Framework (if needed)
+flask
+
+pandas 
+openpyxl 
+scikit-learn
+# Speech Synthesis
+# styletts2
+# whisper-turbo
+
+# Additional Utilities
+# yaml
+# dotenv

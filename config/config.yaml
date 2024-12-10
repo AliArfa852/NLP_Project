@@ -1,0 +1,33 @@
+# MongoDB Configuration
+mongodb:
+  uri: "mongodb://localhost:27017/"
+  database: "emotion_chatbot"
+  collection: "chat_logs"
+
+# LLM Configuration
+# llm:
+#   model_name: "llama3.2:1B"
+#   api_endpoint: "http://localhost:11434"  # Example endpoint for Ollama
+
+# Speech Synthesis Configuration
+speech:
+  method: "StyleTTS2"  # or "Whisper Turbo"
+  output_path: "./outputs/speech/"
+
+# Reinforcement Learning Configuration
+rl:
+  learning_rate: 0.001
+  gamma: 0.95
+  epsilon: 0.1
+
+# Data Configuration
+
+llm:
+  model_name: "llama3.2:1b"
+
+ollama:
+  api_url: "http://localhost:11434/api"
+
+data:
+  raw_data_path: "data/RU-EN-Emotion Dataset.xlsx"
+  processed_data_path: "./data/processed/"
