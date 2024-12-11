@@ -154,5 +154,13 @@ Thank you for using our Roman Urdu Processing and Emotion Detection system! Feel
 - **Data Logging:** Stores interactions in MongoDB for analysis.
 
 
+ DATASET : https://www.kaggle.com/datasets/drkhurramshahzad/roman-urdu-english-code-switched-emotion-dataset
+
 ```bash
 git clone https://github.com/AliArfa852/NLP_Project.git
+
+
+```run 
+python /src/pipeline.py
+# just run the pipeline code 
+or u can run indivijually to test components 
