@@ -160,7 +160,14 @@ Thank you for using our Roman Urdu Processing and Emotion Detection system! Feel
 git clone https://github.com/AliArfa852/NLP_Project.git
 
 
+
+```run ur ollama server  command for cmd 
+
+ollama serve
+
 ```run 
 python /src/pipeline.py
 # just run the pipeline code 
 or u can run indivijually to test components 
+
+edit the config.yamal if u need to change the llm 
