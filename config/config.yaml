@@ -23,7 +23,7 @@ rl:
 # Data Configuration
 
 llm:
-  model_name: "llama3.2"
+  model_name: "llama3.2:latest"
   # model_name: "gemma:2b"
   #model_name: "llama3.2:1b"
 
