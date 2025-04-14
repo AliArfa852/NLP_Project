@@ -15,7 +15,8 @@ sys.path.insert(0, parent_dir)
 
 # Import chatbot components
 from src.emotion_detection import EmotionDetector
-from src.responce_generation import ResponseGenerator
+# Import the enhanced version with personality support
+from src.responce_generation_v1 import ResponseGenerator
 from src.reinforcement_learning import ReinforcementLearner
 from utils.personalities import get_available_personalities, get_personality_name, get_personality_description
 from utils.transliteration import detect_language, urdu_to_roman, roman_to_urdu

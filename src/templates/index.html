@@ -207,6 +207,15 @@
                         </div>
                     </div>
                 </div>
+                <div class="input-group">
+                    <input type="text" id="userInput" class="form-control" placeholder="Type a message...">
+                    <button id="speechButton" class="btn btn-outline-secondary">
+                        <i class="bi bi-mic"></i>
+                    </button>
+                    <button id="sendButton" class="btn btn-primary">
+                        <i class="bi bi-send"></i> Send
+                    </button>
+                </div>
                 <div class="chat-input">
                     <div class="input-group">
                         <input type="text" id="userInput" class="form-control" placeholder="Type a message...">
@@ -323,6 +332,121 @@
                     personalityDescription.textContent = selectedPersonality.description;
                 }
             });
+            // Add this to your JavaScript to enable speech recognition
+            // This can be added to the document.addEventListener('DOMContentLoaded', function() {...}) 
+            // section in your index.html
+
+            // Initialize speech recognition
+            const speechButton = document.getElementById('speechButton');
+            let recognition;
+
+            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                recognition = new SpeechRecognition();
+                
+                // Configure speech recognition
+                recognition.continuous = false;
+                recognition.interimResults = false;
+                
+                // Set language based on selected language
+                const languageSelect = document.getElementById('languageSelect');
+                if (languageSelect) {
+                    // Map language codes to Web Speech API language codes
+                    const languageMap = {
+                        'english': 'en-US',
+                        'urdu': 'ur-PK', 
+                        'hindi': 'hi-IN',
+                        'punjabi': 'pa-IN'
+                    };
+                    
+                    recognition.lang = languageMap[languageSelect.value] || 'en-US';
+                    
+                    // Update language when selection changes
+                    languageSelect.addEventListener('change', function() {
+                        recognition.lang = languageMap[this.value] || 'en-US';
+                    });
+                }
+                
+                // Add event listener to speech button
+                if (speechButton) {
+                    speechButton.addEventListener('click', function() {
+                        const userInput = document.getElementById('userInput');
+                        
+                        if (this.classList.contains('recording')) {
+                            // Stop recording
+                            recognition.stop();
+                            this.classList.remove('recording');
+                            this.innerHTML = '<i class="bi bi-mic"></i>';
+                            userInput.placeholder = 'Type a message...';
+                        } else {
+                            // Start recording
+                            recognition.start();
+                            this.classList.add('recording');
+                            this.innerHTML = '<i class="bi bi-mic-fill"></i>';
+                            userInput.placeholder = 'Listening...';
+                        }
+                    });
+                    
+                    // Add recording-button class for animation
+                    speechButton.classList.add('recording-button');
+                }
+                
+                // Handle speech recognition results
+                recognition.onresult = function(event) {
+                    const userInput = document.getElementById('userInput');
+                    const speechButton = document.getElementById('speechButton');
+                    
+                    const transcript = event.results[0][0].transcript;
+                    userInput.value = transcript;
+                    
+                    // Reset button state
+                    if (speechButton) {
+                        speechButton.classList.remove('recording');
+                        speechButton.innerHTML = '<i class="bi bi-mic"></i>';
+                        userInput.placeholder = 'Type a message...';
+                    }
+                };
+                
+                // Handle speech recognition end
+                recognition.onend = function() {
+                    const speechButton = document.getElementById('speechButton');
+                    const userInput = document.getElementById('userInput');
+                    
+                    // Reset button state
+                    if (speechButton) {
+                        speechButton.classList.remove('recording');
+                        speechButton.innerHTML = '<i class="bi bi-mic"></i>';
+                    }
+                    
+                    if (userInput) {
+                        userInput.placeholder = 'Type a message...';
+                    }
+                };
+                
+                // Handle speech recognition errors
+                recognition.onerror = function(event) {
+                    console.error('Speech recognition error:', event.error);
+                    
+                    const speechButton = document.getElementById('speechButton');
+                    const userInput = document.getElementById('userInput');
+                    
+                    // Reset button state
+                    if (speechButton) {
+                        speechButton.classList.remove('recording');
+                        speechButton.innerHTML = '<i class="bi bi-mic"></i>';
+                    }
+                    
+                    if (userInput) {
+                        userInput.placeholder = 'Type a message...';
+                    }
+                };
+            } else {
+                // Speech recognition not supported
+                if (speechButton) {
+                    speechButton.style.display = 'none';
+                }
+                console.log('Speech recognition is not supported in this browser.');
+            }
             
             // Toggle settings panel
             settingsToggle.addEventListener('click', function() {
