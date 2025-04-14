@@ -24,7 +24,8 @@ class SpeechToText:
         self.engine = self.config['speech']['stt']['engine']
         self.model_path = self.config['speech']['stt']['model_path']
         self.language = self.config['language']['default']
-        
+        self.sample_rate = 16000
+        self.channels = 1
         # Set Vosk logging to errors only
         SetLogLevel(-1)
         
@@ -32,8 +33,7 @@ class SpeechToText:
         self.load_language_model(self.language)
         
         # Audio recording settings
-        self.sample_rate = 16000
-        self.channels = 1
+        
     
     def load_language_model(self, language):
         """Load a specific language model."""
@@ -46,7 +46,7 @@ class SpeechToText:
                 print(f"Warning: Model for {language} not found, falling back to English")
             
             # Construct full model path
-            model_dir = os.path.join(self.model_path, lang_model.replace("vosk-model-", ""))
+            model_dir = os.path.join(self.model_path, lang_model)
             
             # Check if model exists
             if not os.path.exists(model_dir):
@@ -92,9 +92,12 @@ class SpeechToText:
         
         # Save audio to file if filename is provided
         if filename:
-            output_path = os.path.join(self.config['speech']['tts']['output_path'], filename)
+            #output_path = os.path.join(self.config['speech']['tts']['output_path'], filename)
+            #print( filename)
+            output_path=filename
             os.makedirs(os.path.dirname(output_path), exist_ok=True)
             sf.write(output_path, audio_data, self.sample_rate)
+            print(f"Audio recorded to {output_path}")
             print(f"Audio saved to {output_path}")
             return output_path
         
@@ -166,7 +169,7 @@ class SpeechToText:
 if __name__ == "__main__":
     stt = SpeechToText()
     
-    # Test with different languages
+    # Test with different languagess
     for lang in ['english', 'urdu']:
         if lang in stt.config['language']['supported']:
             print(f"\nTesting {lang} speech recognition:")

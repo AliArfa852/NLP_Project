@@ -9,7 +9,7 @@ llm:
   model_name: "qwen2:1.5b"
   # Alternative models
   # model_name: "gemma:2b"
-  # model_name: "llama3.2:1b"
+  #model_name: "deepseek-r1:latest"
 
 ollama:
   api_url: "http://127.0.0.1:11434/api"
@@ -31,11 +31,11 @@ speech:
 
 # Language Configuration
 language:
-  default: "urdu"  # Default language
+  default: "english"  # Default language
   supported: ["urdu", "english", "hindi", "punjabi"]  # Supported languages
   # Model paths for different languages (for Vosk STT)
   models:
-    urdu: "vosk-model-small-en-in-0.4"  # Using Indian English model for Roman Urdu
+    urdu: "vosk-model-small-hi-0.22"  # Using Indian English model for Roman Urdu
     english: "vosk-model-small-en-us-0.15"
     hindi: "vosk-model-small-hi-0.22"
     punjabi: "vosk-model-smalls-hi-0.22"  # Updated Punjabi model

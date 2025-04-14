@@ -192,3 +192,12 @@ rl:
 - This reinforcement learning implementation is based on emotionally-guided reward mechanisms
 - The RAG system is implemented using SQLite for lightweight, offline database capability
 - The reward structure is designed based on psychological models of emotional transitions
+
+
+
+Error:
+idk what is happening but there is a path error
+
+C:\Users\aliar\Documents\sem8\GenAi\project\NLP_Project\outputs\speech\outputs\speech
+
+saves the temp audio file here insted 

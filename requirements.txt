@@ -15,7 +15,7 @@ stable-baselines3
 
 # Database
 pymongo
-
+pyaudio
 # Speech-to-Text
 vosk
 SpeechRecognition
