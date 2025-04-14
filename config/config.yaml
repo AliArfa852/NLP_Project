@@ -5,32 +5,80 @@ mongodb:
   collection: "chat_logs"
 
 # LLM Configuration
-# llm:
-#   model_name: "llama3.2:1B"
-#   api_endpoint: "http://localhost:11434"  # Example endpoint for Ollama
-
-# Speech Synthesis Configuration
-speech:
-  method: "StyleTTS2"  # or "Whisper Turbo"
-  output_path: "./outputs/speech/"
-
-# Reinforcement Learning Configuration
-rl:
-  learning_rate: 0.001
-  gamma: 0.95
-  epsilon: 0.1
-
-# Data Configuration
-
 llm:
-  model_name: "llama3.2:latest"
+  model_name: "qwen2:1.5b"
+  # Alternative models
   # model_name: "gemma:2b"
-  #model_name: "llama3.2:1b"
-
+  # model_name: "llama3.2:1b"
 
 ollama:
   api_url: "http://127.0.0.1:11434/api"
 
+# Speech Processing Configuration
+speech:
+  # Text-to-Speech (TTS)
+  tts:
+    engine: "pyttsx3"  # Options: "pyttsx3", "StyleTTS2", "Whisper Turbo"
+    output_path: "./outputs/speech/"
+    # Voice settings for pyttsx3
+    rate: 150  # Speed of speech 
+    volume: 1.0  # Volume (0.0 to 1.0)
+  
+  # Speech-to-Text (STT)
+  stt:
+    engine: "vosk"  # Options: "vosk", "whisper-local"
+    model_path: "./models/vosk/"  # Path to Vosk models
+
+# Language Configuration
+language:
+  default: "urdu"  # Default language
+  supported: ["urdu", "english", "hindi", "punjabi"]  # Supported languages
+  # Model paths for different languages (for Vosk STT)
+  models:
+    urdu: "vosk-model-small-en-in-0.4"  # Using Indian English model for Roman Urdu
+    english: "vosk-model-small-en-us-0.15"
+    hindi: "vosk-model-small-hi-0.22"
+    punjabi: "vosk-model-smalls-hi-0.22"  # Updated Punjabi model
+    indian_english: "vosk-model-small-en-in-0.4"  # Added Indian English model
+
+# Reinforcement Learning Configuration
+# Reinforcement Learning Configuration
+rl:
+  learning_rate: 0.001
+  gamma: 0.95  # Discount factor for future rewards
+  epsilon: 0.2  # Exploration rate (probability of trying new responses)
+  enabled: true  # Whether RL is enabled by default
+  
+  # Emotion Reward Settings
+  rewards:
+    # Rewards for emotional transitions (from -> to)
+    transitions:
+      # From neutral
+      neutral_to_neutral: 0.1
+      neutral_to_happy: 0.7
+      neutral_to_sad: -0.3
+      neutral_to_angry: -0.5
+      
+      # From happy
+      happy_to_happy: 0.5
+      happy_to_neutral: 0.0
+      happy_to_sad: -0.7
+      happy_to_angry: -0.8
+      
+      # From sad
+      sad_to_happy: 0.8
+      sad_to_neutral: 0.5
+      sad_to_sad: -0.2
+      sad_to_angry: -0.5
+      
+      # From angry
+      angry_to_happy: 0.9
+      angry_to_neutral: 0.7
+      angry_to_sad: -0.1
+      angry_to_angry: -0.6
+
+
+# Data Configuration
 data:
   raw_data_path: "data/RU-EN-Emotion Dataset.xlsx"
   processed_data_path: "./data/processed/"

@@ -1,27 +1,35 @@
-# Data Processing
+# Core dependencies
 pandas
 numpy
+PyYAML
+requests
 
 # Machine Learning
 torch
 transformers
+scikit-learn
+openpyxl
 
 # Reinforcement Learning
 stable-baselines3
 
-# MongoDB
+# Database
 pymongo
 
-# Web Framework (if needed)
+# Speech-to-Text
+vosk
+SpeechRecognition
+sounddevice
+soundfile
+PyAudio; platform_system != "Windows" or python_version < "3.10"
+# For Windows with Python 3.10+, you might need to manually install PyAudio
+
+# Text-to-Speech
+pyttsx3
+
+# Web Framework
 flask
 
-pandas 
-openpyxl 
-scikit-learn
-# Speech Synthesis
-# styletts2
-# whisper-turbo
-
 # Additional Utilities
-# yaml
-# dotenv
+tqdm
+colorama
