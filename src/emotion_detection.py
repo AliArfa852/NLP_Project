@@ -13,9 +13,11 @@ from pymongo import MongoClient
 from pathlib import Path
 
 # Add parent directory to path for importing modules
-parent_dir = str(Path(__file__).resolve().parent.parent)
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)
 
+# Now import from utils package
 from utils.transliteration import detect_language, urdu_to_roman, roman_to_urdu
 
 def load_config(config_path='config/config.yaml'):
@@ -29,9 +31,17 @@ class EmotionDetector:
         config = load_config()
         
         # MongoDB connection for logging
-        self.client = MongoClient(config['mongodb']['uri'])
-        self.db = self.client[config['mongodb']['database']]
-        self.collection = self.db[config['mongodb']['collection']]
+        try:
+            self.client = MongoClient(config['mongodb']['uri'], serverSelectionTimeoutMS=2000)
+            self.db = self.client[config['mongodb']['database']]
+            self.collection = self.db[config['mongodb']['collection']]
+            # Test the connection
+            self.client.server_info()
+            self.mongodb_available = True
+        except Exception as e:
+            print(f"Warning: MongoDB connection failed: {e}")
+            print("Emotion detection will work, but interactions won't be logged to MongoDB")
+            self.mongodb_available = False
         
         # Initialize Ollama API settings
         self.model_name = config['llm']['model_name']
@@ -91,7 +101,8 @@ class EmotionDetector:
             "model": self.model_name,
             "prompt": prompt,
             "temperature": 0.1,  # Lower temperature for more deterministic results
-            "num_predict": 50    # Limit token generation
+            "num_predict": 50,   # Limit token generation
+            "stream": False      # Disable streaming for simpler handling
         }
         
         try:
@@ -164,6 +175,9 @@ Only respond with the emotion name, nothing else:
     
     def log_interaction(self, user_input, emotions, response):
         """Log the interaction to MongoDB."""
+        if not self.mongodb_available:
+            return
+            
         log = {
             'timestamp': time.time(),
             'user_input': user_input,
@@ -171,7 +185,11 @@ Only respond with the emotion name, nothing else:
             'response': response,
             'language': self.language
         }
-        self.collection.insert_one(log)
+        
+        try:
+            self.collection.insert_one(log)
+        except Exception as e:
+            print(f"Error logging to MongoDB: {str(e)}")
 
 if __name__ == "__main__":
     detector = EmotionDetector()

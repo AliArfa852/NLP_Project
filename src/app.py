@@ -3,6 +3,7 @@ Main application for multilingual emotion chatbot with speech capabilities.
 Supports both text and speech interaction in multiple languages.
 Works offline on both Windows and Linux platforms.
 Specialized for Roman Urdu using Indian English voice model.
+Features personality customization and reinforcement learning.
 """
 
 import os
@@ -18,7 +19,8 @@ from datetime import datetime
 colorama.init()
 
 # Add parent directory to path for importing modules
-parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)
 
 # Import custom modules
@@ -29,6 +31,7 @@ from models.speech.speech_to_text import SpeechToText
 from src.database import Database
 from src.reinforcement_learning import ReinforcementLearner
 from utils.transliteration import detect_language, urdu_to_roman, roman_to_urdu
+from utils.personalities import get_available_personalities, get_personality_name, get_personality_description
 
 def load_config(config_path='config/config.yaml'):
     """Load configuration settings from a YAML file."""
@@ -51,6 +54,9 @@ class EmotionChatbotApp:
         # Set initial language
         self.current_language = self.config['language']['default']
         print(f"Initial language set to: {self.current_language}")
+        
+        # Set initial personality
+        self.current_personality = self.config.get('personality', {}).get('default', 'default')
         
         # Initialize components
         print("Loading components...")
@@ -121,11 +127,65 @@ class EmotionChatbotApp:
         # This could be extended to convert between scripts if needed
         return text
         
+    def change_language(self, language):
+        """Change the chatbot's language."""
+        if language in self.config['language']['supported']:
+            self.current_language = language
+            print(f"Language changed to {language}")
+            
+            # Update language for components
+            self.emotion_detector.change_language(language)
+            self.response_generator.change_language(language)
+            self.tts.change_language(language)
+            self.stt.change_language(language)
+            
+            # For Urdu, ensure we're using Indian English model for TTS/STT
+            if language == "urdu":
+                self.tts.change_language("indian_english")
+                self.stt.change_language("indian_english")
+                self.use_transliteration = True
+            else:
+                self.use_transliteration = False
+            
+            message = self.get_localized_message("language_changed", language)
+            print(message)
+            if self.speech_output_enabled:
+                self.tts.speak(message)
+            
+            return True
+        else:
+            print(f"Language {language} not supported")
+            return False
+    
+    def change_personality(self, personality_id):
+        """Change the chatbot's personality."""
+        personalities = get_available_personalities()
+        if personality_id in personalities:
+            self.current_personality = personality_id
+            self.response_generator.change_personality(personality_id)
+            
+            # Inform the user
+            print(f"\n{colorama.Fore.CYAN}Personality changed to: {get_personality_name(personality_id)}{colorama.Style.RESET_ALL}")
+            print(f"{colorama.Fore.CYAN}{get_personality_description(personality_id)}{colorama.Style.RESET_ALL}")
+            
+            # Speak greeting with new personality
+            greeting = self.response_generator._get_default_response('greeting')
+            if self.speech_output_enabled:
+                self.tts.speak(greeting)
+                
+            return True
+        else:
+            print(f"{colorama.Fore.RED}Personality '{personality_id}' not available{colorama.Style.RESET_ALL}")
+            return False
+        
     def run(self):
         """Run the main chat loop."""
         clear_screen()
         welcome_message = self.get_localized_message("welcome")
         print(f"\n{colorama.Fore.CYAN}{welcome_message}{colorama.Style.RESET_ALL}")
+        
+        # Show initial personality
+        print(f"{colorama.Fore.CYAN}Current personality: {get_personality_name(self.current_personality)}{colorama.Style.RESET_ALL}")
         
         if self.speech_output_enabled:
             self.tts.speak(welcome_message)
@@ -200,6 +260,7 @@ class EmotionChatbotApp:
                 log = {
                     'timestamp': datetime.now().isoformat(),
                     'language': self.current_language,
+                    'personality': self.current_personality,
                     'original_input': user_input,
                     'emotions_detected': emotion_labels,
                     'response': response,
@@ -235,13 +296,14 @@ class EmotionChatbotApp:
         print("OPTIONS MENU")
         print("=" * 60)
         print(f"1. Change language (current: {self.current_language})")
-        print(f"2. Toggle speech input (currently {speech_input_status})")
-        print(f"3. Toggle speech output (currently {speech_output_status})")
-        print(f"4. Toggle transliteration (currently {transliteration_status})")
-        print(f"5. Toggle reinforcement learning (currently {rl_status})")
-        print("6. View learning statistics")
-        print("7. Reset learning data")
-        print("8. Exit application")
+        print(f"2. Change personality (current: {get_personality_name(self.current_personality)})")
+        print(f"3. Toggle speech input (currently {speech_input_status})")
+        print(f"4. Toggle speech output (currently {speech_output_status})")
+        print(f"5. Toggle transliteration (currently {transliteration_status})")
+        print(f"6. Toggle reinforcement learning (currently {rl_status})")
+        print("7. View learning statistics")
+        print("8. Reset learning data")
+        print("9. Exit application")
         print("0. Return to chat")
         print("=" * 60)
         print(f"Your choice: {colorama.Style.RESET_ALL}", end="")
@@ -262,37 +324,54 @@ class EmotionChatbotApp:
                     print(f"{colorama.Fore.RED}Language {lang} not supported{colorama.Style.RESET_ALL}")
             
             elif choice == '2':
+                # Change personality
+                personalities = get_available_personalities()
+                print(f"\nAvailable personalities:")
+                for pid, pdata in personalities.items():
+                    print(f"  {pid}: {pdata['name']} - {pdata['description']}")
+                
+                personality = input("\nEnter personality ID: ").lower()
+                self.change_personality(personality)
+            
+            elif choice == '3':
                 # Toggle speech input
                 self.speech_input_enabled = not self.speech_input_enabled
                 status = "enabled" if self.speech_input_enabled else "disabled"
                 print(f"{colorama.Fore.GREEN}Speech input {status}{colorama.Style.RESET_ALL}")
             
-            elif choice == '3':
+            elif choice == '4':
                 # Toggle speech output
                 self.speech_output_enabled = not self.speech_output_enabled
                 status = "enabled" if self.speech_output_enabled else "disabled"
                 print(f"{colorama.Fore.GREEN}Speech output {status}{colorama.Style.RESET_ALL}")
             
-            elif choice == '4':
+            elif choice == '5':
                 # Toggle transliteration
                 self.use_transliteration = not self.use_transliteration
                 status = "enabled" if self.use_transliteration else "disabled"
                 print(f"{colorama.Fore.GREEN}Transliteration {status}{colorama.Style.RESET_ALL}")
             
-            elif choice == '5':
+            elif choice == '6':
                 # Toggle reinforcement learning
                 self.use_rl = not self.use_rl
                 self.response_generator.toggle_rl()
                 status = "enabled" if self.use_rl else "disabled"
                 print(f"{colorama.Fore.GREEN}Reinforcement learning {status}{colorama.Style.RESET_ALL}")
             
-            elif choice == '6':
+            elif choice == '7':
                 # View learning statistics
                 if self.use_rl:
                     stats = self.rl.get_statistics()
                     print(f"{colorama.Fore.CYAN}Learning Statistics:{colorama.Style.RESET_ALL}")
                     for key, value in stats.items():
-                        print(f"  {key}: {value}")
+                        if isinstance(value, list):
+                            print(f"  {key}:")
+                            for item in value:
+                                print(f"    {item}")
+                        elif isinstance(value, float):
+                            print(f"  {key}: {value:.2f}")
+                        else:
+                            print(f"  {key}: {value}")
                     
                     # Show some example learned patterns
                     patterns = self.rl.memory.get_top_patterns(self.current_language, limit=3)
@@ -307,7 +386,7 @@ class EmotionChatbotApp:
                 else:
                     print(f"{colorama.Fore.YELLOW}Reinforcement learning is currently disabled.{colorama.Style.RESET_ALL}")
             
-            elif choice == '7':
+            elif choice == '8':
                 # Reset learning data
                 if self.use_rl:
                     confirm = input(f"{colorama.Fore.RED}This will delete all learning data. Are you sure? (y/n): {colorama.Style.RESET_ALL}").lower()
@@ -317,7 +396,7 @@ class EmotionChatbotApp:
                 else:
                     print(f"{colorama.Fore.YELLOW}Reinforcement learning is currently disabled.{colorama.Style.RESET_ALL}")
             
-            elif choice == '8':
+            elif choice == '9':
                 # Exit
                 print(f"{colorama.Fore.CYAN}Exiting application...{colorama.Style.RESET_ALL}")
                 return True  # Exit the app
@@ -329,34 +408,6 @@ class EmotionChatbotApp:
             
         except Exception as e:
             print(f"{colorama.Fore.RED}Error in menu: {str(e)}{colorama.Style.RESET_ALL}")
-            return False
-    
-    def change_language(self, language):
-        """Change the chatbot's language."""
-        if language in self.config['language']['supported']:
-            self.current_language = language
-            print(f"Language changed to {language}")
-            
-            # Update language for speech components
-            self.tts.change_language(language)
-            self.stt.change_language(language)
-            
-            # For Urdu, ensure we're using Indian English model for TTS/STT
-            if language == "urdu":
-                self.tts.change_language("indian_english")
-                self.stt.change_language("indian_english")
-                self.use_transliteration = True
-            else:
-                self.use_transliteration = False
-            
-            message = self.get_localized_message("language_changed", language)
-            print(message)
-            if self.speech_output_enabled:
-                self.tts.speak(message)
-            
-            return True
-        else:
-            print(f"Language {language} not supported")
             return False
     
     def get_localized_message(self, message_key, lang=None):
@@ -395,48 +446,6 @@ class EmotionChatbotApp:
                 "urdu": "Awaaz input chalu hai. Beep ke baad bolein.",
                 "hindi": "वाणी इनपुट सक्षम है। बीप के बाद बोलें।",
                 "punjabi": "ਬੋਲੀ ਇਨਪੁਟ ਨੂੰ ਸਮਰੱਥ ਕੀਤਾ ਗਿਆ ਹੈ। ਬੀਪ ਤੋਂ ਬਾਅਦ ਬੋਲੋ।"
-            },
-            "options_menu": {
-                "english": """
-=== OPTIONS MENU ===
-1. Change language
-2. Toggle speech input (currently {})
-3. Toggle speech output (currently {})
-4. Toggle transliteration (used for Urdu)
-5. Exit
-0. Return to chat
-
-Your choice: """,
-                "urdu": """
-=== OPTIONS MENU ===
-1. Language badlein
-2. Speech input toggle karein (is waqt {})
-3. Speech output toggle karein (is waqt {})
-4. Transliteration toggle karein (Urdu ke liye)
-5. Exit
-0. Chat par wapas jayen
-
-Aap ka choice: """,
-                "hindi": """
-=== विकल्प मेनू ===
-1. भाषा बदलें
-2. वाणी इनपुट टॉगल करें (वर्तमान में {})
-3. वाणी आउटपुट टॉगल करें (वर्तमान में {})
-4. लिप्यंतरण टॉगल करें (उर्दू के लिए)
-5. बाहर निकलें
-0. चैट पर वापस जाएं
-
-आपका विकल्प: """,
-                "punjabi": """
-=== ਵਿਕਲਪ ਮੇਨੂ ===
-1. ਭਾਸ਼ਾ ਬਦਲੋ
-2. ਬੋਲੀ ਇਨਪੁਟ ਟੌਗਲ ਕਰੋ (ਮੌਜੂਦਾ ਤੌਰ 'ਤੇ {})
-3. ਬੋਲੀ ਆਉਟਪੁਟ ਟੌਗਲ ਕਰੋ (ਮੌਜੂਦਾ ਤੌਰ 'ਤੇ {})
-4. ਲਿਪੀਅੰਤਰਣ ਟੌਗਲ ਕਰੋ (ਉਰਦੂ ਲਈ)
-5. ਬਾਹਰ ਨਿਕਲੋ
-0. ਚੈਟ 'ਤੇ ਵਾਪਸ ਜਾਓ
-
-ਤੁਹਾਡੀ ਚੋਣ: """
             }
         }
         

@@ -29,6 +29,9 @@ speech:
     engine: "vosk"  # Options: "vosk", "whisper-local"
     model_path: "./models/vosk/"  # Path to Vosk models
 
+personality:
+  default: "default"
+  
 # Language Configuration
 language:
   default: "english"  # Default language
