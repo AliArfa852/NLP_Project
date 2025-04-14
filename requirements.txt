@@ -3,7 +3,7 @@ pandas
 numpy
 PyYAML
 requests
-
+flask
 # Machine Learning
 torch
 transformers

@@ -1,0 +1,193 @@
+/* Additional custom styles for the Multilingual Emotion Chatbot */
+
+/* Smooth scrolling for chat container */
+.chat-messages {
+    scroll-behavior: smooth;
+}
+
+/* Hover effects for buttons */
+.btn {
+    transition: all 0.2s ease-in-out;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Chat message hover effects */
+.message {
+    transition: all 0.2s ease-in-out;
+}
+
+.message:hover {
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Personality selection highlight */
+#personalitySelect option:checked {
+    font-weight: bold;
+}
+
+/* Settings panel transition */
+#settingsPanel {
+    transition: all 0.3s ease-in-out;
+    max-height: 0;
+    overflow: hidden;
+    padding: 0 15px;
+    opacity: 0;
+}
+
+#settingsPanel.show {
+    max-height: 300px;
+    padding: 15px;
+    opacity: 1;
+}
+
+/* Tab content animation */
+.tab-pane {
+    transition: all 0.3s ease-in-out;
+}
+
+/* Emotion tags hover effects */
+.emotion-tag {
+    transition: all 0.2s ease-in-out;
+    cursor: default;
+}
+
+.emotion-tag:hover {
+    transform: scale(1.1);
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #121212;
+        color: #e0e0e0;
+    }
+    
+    .chat-header {
+        background-color: #3a2a64;
+    }
+    
+    .chat-messages {
+        background-color: #1e1e1e;
+        border-color: #333;
+    }
+    
+    .chat-input {
+        background-color: #1e1e1e;
+        border-color: #333;
+    }
+    
+    .user-message {
+        background-color: #1f4a36;
+        color: #e0e0e0;
+    }
+    
+    .bot-message {
+        background-color: #2b2b2b;
+        color: #e0e0e0;
+    }
+    
+    .settings-panel {
+        background-color: #1e1e1e;
+    }
+    
+    .tab-content {
+        background-color: #1e1e1e;
+        border-color: #333;
+    }
+    
+    .stats-item {
+        background-color: #2b2b2b;
+    }
+    
+    .nav-tabs {
+        border-color: #333;
+    }
+    
+    .nav-link {
+        color: #e0e0e0;
+    }
+    
+    .nav-link.active {
+        background-color: #1e1e1e;
+        border-color: #333;
+        color: #fff;
+    }
+    
+    .form-control, .form-select {
+        background-color: #2b2b2b;
+        border-color: #333;
+        color: #e0e0e0;
+    }
+}
+
+/* Mobile responsiveness improvements */
+@media (max-width: 768px) {
+    .chat-container {
+        padding: 10px;
+    }
+    
+    .chat-header {
+        padding: 10px;
+    }
+    
+    .chat-messages {
+        height: 400px;
+    }
+    
+    .message {
+        max-width: 90%;
+    }
+}
+
+/* Loading Spinner Animation */
+@keyframes spinner {
+    to {transform: rotate(360deg);}
+}
+
+.loading-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top-color: #007bff;
+    animation: spinner 0.6s linear infinite;
+}
+
+/* Voice recording button animations */
+.recording-button {
+    position: relative;
+    overflow: hidden;
+}
+
+.recording-button::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 0, 0, 0.2);
+    border-radius: 50%;
+    transform: scale(0);
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.95);
+        opacity: 0.7;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 0.4;
+    }
+    100% {
+        transform: scale(0.95);
+        opacity: 0.7;
+    }
+}

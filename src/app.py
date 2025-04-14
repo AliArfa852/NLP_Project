@@ -1,474 +1,191 @@
 """
-Main application for multilingual emotion chatbot with speech capabilities.
-Supports both text and speech interaction in multiple languages.
-Works offline on both Windows and Linux platforms.
-Specialized for Roman Urdu using Indian English voice model.
-Features personality customization and reinforcement learning.
+Web frontend for the multilingual emotion chatbot using Flask.
 """
 
 import os
 import sys
-import time
-import yaml
-import platform
 import json
-import colorama
+from flask import Flask, render_template, request, jsonify, session
 from datetime import datetime
 
-# Initialize colorama for cross-platform colored terminal output
-colorama.init()
-
-# Add parent directory to path for importing modules
+# Add the project root to the path
 current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)
 
-# Import custom modules
+# Import chatbot components
 from src.emotion_detection import EmotionDetector
 from src.responce_generation import ResponseGenerator
-from models.speech.text_to_speech import TextToSpeech
-from models.speech.speech_to_text import SpeechToText
-from src.database import Database
 from src.reinforcement_learning import ReinforcementLearner
-from utils.transliteration import detect_language, urdu_to_roman, roman_to_urdu
 from utils.personalities import get_available_personalities, get_personality_name, get_personality_description
+from utils.transliteration import detect_language, urdu_to_roman, roman_to_urdu
+import config.config as config
 
-def load_config(config_path='config/config.yaml'):
-    """Load configuration settings from a YAML file."""
-    with open(config_path, 'r') as file:
-        return yaml.safe_load(file)
+# Initialize Flask app
+app = Flask(__name__)
+app.secret_key = 'emotion_chatbot_secret_key'  # Required for session
 
-def clear_screen():
-    """Clear terminal screen based on the operating system."""
-    if platform.system() == "Windows":
-        os.system('cls')
-    else:
-        os.system('clear')
+# Initialize chatbot components
+emotion_detector = EmotionDetector()
+response_generator = ResponseGenerator()
+reinforcement_learner = ReinforcementLearner()
 
-class EmotionChatbotApp:
-    def __init__(self):
-        """Initialize the chatbot application with all components."""
-        print("Initializing Multilingual Emotion Chatbot...")
-        self.config = load_config()
-        
-        # Set initial language
-        self.current_language = self.config['language']['default']
-        print(f"Initial language set to: {self.current_language}")
-        
-        # Set initial personality
-        self.current_personality = self.config.get('personality', {}).get('default', 'default')
-        
-        # Initialize components
-        print("Loading components...")
-        self.emotion_detector = EmotionDetector()
-        self.response_generator = ResponseGenerator()
-        self.tts = TextToSpeech()
-        self.stt = SpeechToText()
-        self.db = Database()
-        self.rl = ReinforcementLearner()
-        
-        # Set input/output mode (text or speech)
-        self.speech_input_enabled = False
-        self.speech_output_enabled = True
-        
-        # Roman Urdu specific settings
-        self.use_transliteration = True  # Enable transliteration for Urdu
-        self.input_processor = self._process_input
-        self.output_processor = self._process_output
-        
-        # Reinforcement learning settings
-        self.use_rl = self.config['rl'].get('enabled', True)
-        
-        print("Initialization complete!")
+# Track the conversation history
+conversations = {}
+
+# Get available languages and personalities
+def get_available_languages():
+    """Get list of available languages from config."""
+    return config.language['supported']
+
+def get_language_name(language_code):
+    """Get the display name for a language code."""
+    language_names = {
+        'english': 'English',
+        'urdu': 'Roman Urdu',
+        'hindi': 'Hindi',
+        'punjabi': 'Punjabi'
+    }
+    return language_names.get(language_code, language_code.capitalize())
+
+@app.route('/')
+def index():
+    """Render the main chat interface."""
+    # Initialize session if needed
+    if 'user_id' not in session:
+        session['user_id'] = f"user_{datetime.now().strftime('%Y%m%d%H%M%S')}"
+        conversations[session['user_id']] = []
     
-    def _process_input(self, text):
-        """
-        Process input text before sending it to the emotion detection.
-        For Roman Urdu mode, this ensures the text is in the correct format.
-        
-        Args:
-            text: Input text from user
-            
-        Returns:
-            Processed text ready for emotion detection
-        """
-        if not text:
-            return text
-            
-        # Detect language and handle appropriately
-        language = detect_language(text)
-        
-        if self.current_language == "urdu" and self.use_transliteration:
-            if language == "urdu_script":
-                # Convert from Urdu script to Roman Urdu
-                return urdu_to_roman(text)
-            else:
-                # Assume it's already in Roman Urdu or another language
-                return text
-        else:
-            # For other languages, no special processing
-            return text
+    # Get available options for dropdowns
+    languages = get_available_languages()
+    personalities = get_available_personalities()
     
-    def _process_output(self, text):
-        """
-        Process output text before displaying or speaking it.
-        For Roman Urdu mode, this may convert between Roman and script forms.
-        
-        Args:
-            text: Output text from response generator
-            
-        Returns:
-            Processed text ready for display or speech
-        """
-        if not text:
-            return text
-            
-        # For now, we're keeping output in the same format as generated
-        # This could be extended to convert between scripts if needed
-        return text
-        
-    def change_language(self, language):
-        """Change the chatbot's language."""
-        if language in self.config['language']['supported']:
-            self.current_language = language
-            print(f"Language changed to {language}")
-            
-            # Update language for components
-            self.emotion_detector.change_language(language)
-            self.response_generator.change_language(language)
-            self.tts.change_language(language)
-            self.stt.change_language(language)
-            
-            # For Urdu, ensure we're using Indian English model for TTS/STT
-            if language == "urdu":
-                self.tts.change_language("indian_english")
-                self.stt.change_language("indian_english")
-                self.use_transliteration = True
-            else:
-                self.use_transliteration = False
-            
-            message = self.get_localized_message("language_changed", language)
-            print(message)
-            if self.speech_output_enabled:
-                self.tts.speak(message)
-            
-            return True
-        else:
-            print(f"Language {language} not supported")
-            return False
+    # Format the personality options for the template
+    personality_options = [
+        {'id': pid, 'name': pdata['name'], 'description': pdata['description']}
+        for pid, pdata in personalities.items()
+    ]
     
-    def change_personality(self, personality_id):
-        """Change the chatbot's personality."""
-        personalities = get_available_personalities()
-        if personality_id in personalities:
-            self.current_personality = personality_id
-            self.response_generator.change_personality(personality_id)
-            
-            # Inform the user
-            print(f"\n{colorama.Fore.CYAN}Personality changed to: {get_personality_name(personality_id)}{colorama.Style.RESET_ALL}")
-            print(f"{colorama.Fore.CYAN}{get_personality_description(personality_id)}{colorama.Style.RESET_ALL}")
-            
-            # Speak greeting with new personality
-            greeting = self.response_generator._get_default_response('greeting')
-            if self.speech_output_enabled:
-                self.tts.speak(greeting)
-                
-            return True
-        else:
-            print(f"{colorama.Fore.RED}Personality '{personality_id}' not available{colorama.Style.RESET_ALL}")
-            return False
-        
-    def run(self):
-        """Run the main chat loop."""
-        clear_screen()
-        welcome_message = self.get_localized_message("welcome")
-        print(f"\n{colorama.Fore.CYAN}{welcome_message}{colorama.Style.RESET_ALL}")
-        
-        # Show initial personality
-        print(f"{colorama.Fore.CYAN}Current personality: {get_personality_name(self.current_personality)}{colorama.Style.RESET_ALL}")
-        
-        if self.speech_output_enabled:
-            self.tts.speak(welcome_message)
-        
-        running = True
-        
-        # Track conversation state for RL
-        previous_input = None
-        previous_emotion = None
-        
-        while running:
-            try:
-                # Show prompt based on input mode
-                if self.speech_input_enabled:
-                    print(f"\n{colorama.Fore.YELLOW}{self.get_localized_message('speech_input_enabled')}{colorama.Style.RESET_ALL}")
-                    time.sleep(0.5)  # Give user time to prepare
-                    print("\007")  # ASCII bell (beep sound)
-                    user_input = self.stt.transcribe_speech(duration=5)
-                    # Process input (convert if necessary)
-                    user_input = self.input_processor(user_input)
-                    print(f"{colorama.Fore.GREEN}{self.get_localized_message('input_prompt')}{user_input}{colorama.Style.RESET_ALL}")
-                else:
-                    user_input = input(f"\n{colorama.Fore.GREEN}{self.get_localized_message('input_prompt')}{colorama.Style.RESET_ALL}")
-                    # Process input (convert if necessary)
-                    user_input = self.input_processor(user_input)
-                
-                # Check for special commands
-                if user_input.lower() in ['exit', 'quit', 'bye']:
-                    print(f"{colorama.Fore.CYAN}Goodbye!{colorama.Style.RESET_ALL}")
-                    if self.speech_output_enabled:
-                        self.tts.speak("Goodbye!")
-                    break
-                
-                if user_input.lower() in ['options', 'menu', '/menu', '/options']:
-                    self.show_options_menu()
-                    continue
-                
-                if not user_input.strip():
-                    continue
-                
-                # Process user input
-                # Detect emotions
-                emotions = self.emotion_detector.detect_emotion(user_input)
-                emotion_labels = [e['label'] for e in emotions]
-                primary_emotion = emotion_labels[0] if emotion_labels else 'neutral'
-                
-                print(f"{colorama.Fore.BLUE}Detected Emotions: {', '.join(emotion_labels)}{colorama.Style.RESET_ALL}")
-                
-                # If we have a previous input and RL is enabled, update the RL model
-                if previous_input is not None and self.use_rl:
-                    # Update RL model with new emotional state
-                    self.rl.update(
-                        previous_input,
-                        previous_emotion,
-                        primary_emotion,
-                        self.current_language
-                    )
-                
-                # Generate response
-                response = self.response_generator.generate_response(user_input, emotions)
-                
-                # Process output (convert if necessary)
-                processed_response = self.output_processor(response)
-                
-                print(f"{colorama.Fore.MAGENTA}{self.get_localized_message('bot_prefix')}{processed_response}{colorama.Style.RESET_ALL}")
-                
-                # Speak response if enabled
-                if self.speech_output_enabled:
-                    self.tts.speak(processed_response)
-                
-                # Log interaction
-                log = {
-                    'timestamp': datetime.now().isoformat(),
-                    'language': self.current_language,
-                    'personality': self.current_personality,
-                    'original_input': user_input,
-                    'emotions_detected': emotion_labels,
-                    'response': response,
-                    'speech_input': self.speech_input_enabled,
-                    'speech_output': self.speech_output_enabled,
-                    'transliteration_used': self.use_transliteration,
-                    'rl_enabled': self.use_rl
-                }
-                self.db.insert_log(log)
-                
-                # Update conversation state for RL
-                previous_input = user_input
-                previous_emotion = primary_emotion
-                
-            except KeyboardInterrupt:
-                print(f"\n{colorama.Fore.YELLOW}Interrupted{colorama.Style.RESET_ALL}")
-                if self.show_options_menu():
-                    running = False
-            except Exception as e:
-                print(f"{colorama.Fore.RED}Error: {str(e)}{colorama.Style.RESET_ALL}")
-                continue
+    return render_template(
+        'index.html', 
+        languages=languages,
+        language_names={code: get_language_name(code) for code in languages},
+        personalities=personality_options,
+        default_language=config.language['default'],
+        default_personality=config.personality['default'],
+        rl_enabled=config.rl['enabled']
+    )
+
+@app.route('/send_message', methods=['POST'])
+def send_message():
+    """Process a message from the user and return the chatbot's response."""
+    data = request.json
+    user_input = data.get('message', '')
+    language = data.get('language', 'english')
+    personality = data.get('personality', 'default')
+    use_rl = data.get('use_rl', True)
     
-    def show_options_menu(self):
-        """Show options menu and handle user selection."""
-        speech_input_status = "enabled" if self.speech_input_enabled else "disabled"
-        speech_output_status = "enabled" if self.speech_output_enabled else "disabled"
-        transliteration_status = "enabled" if self.use_transliteration else "disabled"
-        rl_status = "enabled" if self.use_rl else "disabled"
-        
-        # Display menu
-        print(f"{colorama.Fore.YELLOW}")
-        print("=" * 60)
-        print("OPTIONS MENU")
-        print("=" * 60)
-        print(f"1. Change language (current: {self.current_language})")
-        print(f"2. Change personality (current: {get_personality_name(self.current_personality)})")
-        print(f"3. Toggle speech input (currently {speech_input_status})")
-        print(f"4. Toggle speech output (currently {speech_output_status})")
-        print(f"5. Toggle transliteration (currently {transliteration_status})")
-        print(f"6. Toggle reinforcement learning (currently {rl_status})")
-        print("7. View learning statistics")
-        print("8. Reset learning data")
-        print("9. Exit application")
-        print("0. Return to chat")
-        print("=" * 60)
-        print(f"Your choice: {colorama.Style.RESET_ALL}", end="")
-        
-        try:
-            choice = input()
-            
-            if choice == '0':
-                return False  # Return to chat
-            
-            elif choice == '1':
-                # Change language
-                print(f"Available languages: {', '.join(self.config['language']['supported'])}")
-                lang = input("Enter language: ").lower()
-                if self.change_language(lang):
-                    print(f"{colorama.Fore.GREEN}Language changed to {lang}{colorama.Style.RESET_ALL}")
-                else:
-                    print(f"{colorama.Fore.RED}Language {lang} not supported{colorama.Style.RESET_ALL}")
-            
-            elif choice == '2':
-                # Change personality
-                personalities = get_available_personalities()
-                print(f"\nAvailable personalities:")
-                for pid, pdata in personalities.items():
-                    print(f"  {pid}: {pdata['name']} - {pdata['description']}")
-                
-                personality = input("\nEnter personality ID: ").lower()
-                self.change_personality(personality)
-            
-            elif choice == '3':
-                # Toggle speech input
-                self.speech_input_enabled = not self.speech_input_enabled
-                status = "enabled" if self.speech_input_enabled else "disabled"
-                print(f"{colorama.Fore.GREEN}Speech input {status}{colorama.Style.RESET_ALL}")
-            
-            elif choice == '4':
-                # Toggle speech output
-                self.speech_output_enabled = not self.speech_output_enabled
-                status = "enabled" if self.speech_output_enabled else "disabled"
-                print(f"{colorama.Fore.GREEN}Speech output {status}{colorama.Style.RESET_ALL}")
-            
-            elif choice == '5':
-                # Toggle transliteration
-                self.use_transliteration = not self.use_transliteration
-                status = "enabled" if self.use_transliteration else "disabled"
-                print(f"{colorama.Fore.GREEN}Transliteration {status}{colorama.Style.RESET_ALL}")
-            
-            elif choice == '6':
-                # Toggle reinforcement learning
-                self.use_rl = not self.use_rl
-                self.response_generator.toggle_rl()
-                status = "enabled" if self.use_rl else "disabled"
-                print(f"{colorama.Fore.GREEN}Reinforcement learning {status}{colorama.Style.RESET_ALL}")
-            
-            elif choice == '7':
-                # View learning statistics
-                if self.use_rl:
-                    stats = self.rl.get_statistics()
-                    print(f"{colorama.Fore.CYAN}Learning Statistics:{colorama.Style.RESET_ALL}")
-                    for key, value in stats.items():
-                        if isinstance(value, list):
-                            print(f"  {key}:")
-                            for item in value:
-                                print(f"    {item}")
-                        elif isinstance(value, float):
-                            print(f"  {key}: {value:.2f}")
-                        else:
-                            print(f"  {key}: {value}")
-                    
-                    # Show some example learned patterns
-                    patterns = self.rl.memory.get_top_patterns(self.current_language, limit=3)
-                    if patterns:
-                        print(f"\n{colorama.Fore.CYAN}Top Learned Patterns:{colorama.Style.RESET_ALL}")
-                        for pattern in patterns:
-                            print(f"  {pattern['emotion_sequence']} (reward: {pattern['avg_reward']:.2f}, count: {pattern['count']})")
-                            if pattern['successful_responses']:
-                                responses = json.loads(pattern['successful_responses'])
-                                for i, resp in enumerate(responses[:2]):
-                                    print(f"    Response {i+1}: {resp[:50]}...")
-                else:
-                    print(f"{colorama.Fore.YELLOW}Reinforcement learning is currently disabled.{colorama.Style.RESET_ALL}")
-            
-            elif choice == '8':
-                # Reset learning data
-                if self.use_rl:
-                    confirm = input(f"{colorama.Fore.RED}This will delete all learning data. Are you sure? (y/n): {colorama.Style.RESET_ALL}").lower()
-                    if confirm == 'y':
-                        self.rl.reset_memory()
-                        print(f"{colorama.Fore.GREEN}Learning data has been reset.{colorama.Style.RESET_ALL}")
-                else:
-                    print(f"{colorama.Fore.YELLOW}Reinforcement learning is currently disabled.{colorama.Style.RESET_ALL}")
-            
-            elif choice == '9':
-                # Exit
-                print(f"{colorama.Fore.CYAN}Exiting application...{colorama.Style.RESET_ALL}")
-                return True  # Exit the app
-            
-            else:
-                print(f"{colorama.Fore.RED}Invalid choice{colorama.Style.RESET_ALL}")
-            
-            return False  # Don't exit the app
-            
-        except Exception as e:
-            print(f"{colorama.Fore.RED}Error in menu: {str(e)}{colorama.Style.RESET_ALL}")
-            return False
+    # Update component settings
+    emotion_detector.change_language(language)
+    response_generator.change_language(language)
+    response_generator.change_personality(personality)
     
-    def get_localized_message(self, message_key, lang=None):
-        """Get localized message based on the current language."""
-        if not lang:
-            lang = self.current_language
-            
-        # Messages for different languages
-        messages = {
-            "welcome": {
-                "english": "Welcome to the multilingual emotion chatbot! How are you feeling today?",
-                "urdu": "Multilingual emotion chatbot mein khush amdeed! Aaj aap kaisa mehsoos kar rahe hain?",
-                "hindi": "बहुभाषी भावना चैटबॉट में आपका स्वागत है! आज आप कैसा महसूस कर रहे हैं?",
-                "punjabi": "ਬਹੁਭਾਸ਼ੀ ਭਾਵਨਾ ਚੈਟਬੋਟ ਵਿੱਚ ਤੁਹਾਡਾ ਸਵਾਗਤ ਹੈ! ਅੱਜ ਤੁਸੀਂ ਕਿਵੇਂ ਮਹਿਸੂਸ ਕਰ ਰਹੇ ਹੋ?"
-            },
-            "language_changed": {
-                "english": f"Language changed to {lang}",
-                "urdu": f"Language badal di gayi hai: {lang}",
-                "hindi": f"भाषा बदली गई {lang}",
-                "punjabi": f"ਭਾਸ਼ਾ ਬਦਲੀ ਗਈ {lang}"
-            },
-            "input_prompt": {
-                "english": "You: ",
-                "urdu": "Aap: ",
-                "hindi": "आप: ",
-                "punjabi": "ਤੁਸੀਂ: "
-            },
-            "bot_prefix": {
-                "english": "Bot: ",
-                "urdu": "Bot: ",
-                "hindi": "बॉट: ",
-                "punjabi": "ਬੋਟ: "
-            },
-            "speech_input_enabled": {
-                "english": "Speech input enabled. Speak after the beep.",
-                "urdu": "Awaaz input chalu hai. Beep ke baad bolein.",
-                "hindi": "वाणी इनपुट सक्षम है। बीप के बाद बोलें।",
-                "punjabi": "ਬੋਲੀ ਇਨਪੁਟ ਨੂੰ ਸਮਰੱਥ ਕੀਤਾ ਗਿਆ ਹੈ। ਬੀਪ ਤੋਂ ਬਾਅਦ ਬੋਲੋ।"
-            }
+    # Process for Roman Urdu if needed
+    if language == "urdu":
+        lang_type = detect_language(user_input)
+        if lang_type == "urdu_script":
+            user_input = urdu_to_roman(user_input)
+    
+    # Get user ID from session
+    user_id = session.get('user_id', f"user_{datetime.now().strftime('%Y%m%d%H%M%S')}")
+    
+    # Detect emotions
+    emotions = emotion_detector.detect_emotion(user_input)
+    emotion_labels = [e['label'] for e in emotions]
+    primary_emotion = emotion_labels[0] if emotion_labels else 'neutral'
+    
+    # Get the most recent conversation for this user
+    user_history = conversations.get(user_id, [])
+    previous_message = user_history[-1] if user_history else None
+    
+    # Update RL if there's a previous message
+    if previous_message and use_rl:
+        previous_input = previous_message.get('user_input', '')
+        previous_emotion = previous_message.get('emotion', 'neutral')
+        
+        reinforcement_learner.update(
+            previous_input,
+            previous_emotion,
+            primary_emotion,
+            language
+        )
+    
+    # Generate response
+    bot_response = response_generator.generate_response(user_input, emotions)
+    
+    # Store the current interaction
+    current_interaction = {
+        'timestamp': datetime.now().isoformat(),
+        'user_input': user_input,
+        'emotion': primary_emotion,
+        'response': bot_response,
+        'language': language,
+        'personality': personality
+    }
+    
+    # Update conversation history
+    if user_id not in conversations:
+        conversations[user_id] = []
+    conversations[user_id].append(current_interaction)
+    
+    # Trim conversation history to last 50 messages to prevent memory issues
+    if len(conversations[user_id]) > 50:
+        conversations[user_id] = conversations[user_id][-50:]
+    
+    return jsonify({
+        'response': bot_response,
+        'emotions': emotion_labels,
+        'language': language,
+        'personality': personality,
+        'personality_name': get_personality_name(personality)
+    })
+
+@app.route('/get_learning_stats', methods=['GET'])
+def get_learning_stats():
+    """Get statistics from the reinforcement learning system."""
+    try:
+        stats = reinforcement_learner.get_statistics()
+        
+        # Format stats for display
+        formatted_stats = {
+            'total_interactions': stats.get('total_interactions', 0),
+            'average_reward': round(stats.get('average_reward', 0), 2),
+            'patterns_learned': stats.get('patterns_learned', 0),
+            'success_rate': round(stats.get('success_rate', 0), 2),
+            'top_transitions': stats.get('top_transitions', [])
         }
         
-        # Get the appropriate message for the current language or use English as fallback
-        language_messages = messages.get(message_key, {})
-        return language_messages.get(lang, language_messages.get('english', f"Message not found: {message_key}"))
-
-
-def main():
-    """Main function to run the application."""
-    try:
-        app = EmotionChatbotApp()
-        app.run()
-    except KeyboardInterrupt:
-        print("\nApplication terminated by user.")
+        return jsonify({'success': True, 'stats': formatted_stats})
     except Exception as e:
-        print(f"Error: {str(e)}")
-        import traceback
-        traceback.print_exc()
-    finally:
-        # Clean up colorama
-        colorama.deinit()
-        print("Goodbye!")
+        return jsonify({'success': False, 'error': str(e)})
+
+@app.route('/reset_learning', methods=['POST'])
+def reset_learning():
+    """Reset the reinforcement learning data."""
+    try:
+        reinforcement_learner.reset_memory()
+        return jsonify({'success': True, 'message': 'Learning data has been reset.'})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)})
+
+@app.route('/clear_chat', methods=['POST'])
+def clear_chat():
+    """Clear the chat history for the current user."""
+    user_id = session.get('user_id')
+    if user_id and user_id in conversations:
+        conversations[user_id] = []
+    
+    return jsonify({'success': True})
 
 if __name__ == "__main__":
-    main()
+    app.run(debug=True, host='0.0.0.0', port=5000)

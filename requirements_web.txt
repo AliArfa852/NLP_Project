@@ -1,0 +1,37 @@
+# Web interface dependencies
+flask==2.2.3
+gunicorn==20.1.0
+python-dotenv==1.0.0
+
+# Core dependencies
+pandas
+numpy
+PyYAML>=6.0
+requests>=2.28.0
+
+# Machine Learning
+torch>=2.0.0
+transformers>=4.27.0
+scikit-learn>=1.2.2
+openpyxl>=3.1.2
+
+# Reinforcement Learning
+stable-baselines3>=1.8.0
+
+# Database
+pymongo>=4.3.3
+
+# Speech-to-Text
+vosk>=0.3.44
+SpeechRecognition>=3.10.0
+sounddevice>=0.4.6
+soundfile>=0.11.0
+PyAudio>=0.2.13; platform_system != "Windows" or python_version < "3.10"
+
+# Text-to-Speech
+pyttsx3>=2.90
+
+# Additional Utilities
+tqdm>=4.65.0
+colorama>=0.4.6
+pillow>=10.0.0

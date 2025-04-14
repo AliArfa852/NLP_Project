@@ -162,10 +162,11 @@
                             <div class="mb-3">
                                 <label for="languageSelect" class="form-label">Language:</label>
                                 <select id="languageSelect" class="form-select">
-                                    <option value="english" selected>English</option>
-                                    <option value="urdu">Roman Urdu</option>
-                                    <option value="hindi">Hindi</option>
-                                    <option value="punjabi">Punjabi</option>
+                                    {% for lang in languages %}
+                                    <option value="{{ lang }}" {% if lang == default_language %}selected{% endif %}>
+                                        {{ language_names[lang] }}
+                                    </option>
+                                    {% endfor %}
                                 </select>
                             </div>
                         </div>
@@ -173,13 +174,14 @@
                             <div class="mb-3">
                                 <label for="personalitySelect" class="form-label">Personality:</label>
                                 <select id="personalitySelect" class="form-select">
-                                    <option value="default" selected>Default Assistant</option>
-                                    <option value="friendly">Friendly Companion</option>
-                                    <option value="professional">Professional Advisor</option>
-                                    <option value="creative">Creative Storyteller</option>
+                                    {% for personality in personalities %}
+                                    <option value="{{ personality.id }}" {% if personality.id == default_personality %}selected{% endif %}>
+                                        {{ personality.name }}
+                                    </option>
+                                    {% endfor %}
                                 </select>
                                 <div id="personalityDescription" class="personality-description">
-                                    A helpful and adaptable assistant
+                                    {{ personalities[0].description }}
                                 </div>
                             </div>
                         </div>
@@ -187,7 +189,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="rlToggle" checked>
+                                <input class="form-check-input" type="checkbox" id="rlToggle" {% if rl_enabled %}checked{% endif %}>
                                 <label class="form-check-label" for="rlToggle">Enable Learning</label>
                             </div>
                         </div>
@@ -279,10 +281,9 @@
                         </ul>
                         <h5>Available Personalities:</h5>
                         <ul>
-                            <li><strong>Default Assistant:</strong> A helpful and adaptable assistant</li>
-                            <li><strong>Friendly Companion:</strong> Warm and supportive conversational partner</li>
-                            <li><strong>Professional Advisor:</strong> Formal and direct communication style</li>
-                            <li><strong>Creative Storyteller:</strong> Imaginative and engaging responses</li>
+                            {% for personality in personalities %}
+                            <li><strong>{{ personality.name }}:</strong> {{ personality.description }}</li>
+                            {% endfor %}
                         </ul>
                     </div>
                 </div>
@@ -311,14 +312,8 @@
             const refreshStatsBtn = document.getElementById('refreshStatsBtn');
             const resetLearningBtn = document.getElementById('resetLearningBtn');
             
-            // Personalities
-            const personalities = [
-                { id: 'default', name: 'Default Assistant', description: 'A helpful and adaptable assistant' },
-                { id: 'friendly', name: 'Friendly Companion', description: 'Warm and supportive conversational partner' },
-                { id: 'professional', name: 'Professional Advisor', description: 'Formal and direct communication style' },
-                { id: 'creative', name: 'Creative Storyteller', description: 'Imaginative and engaging responses' }
-            ];
-            
+            // Initialize
+            const personalities = JSON.parse('{{ personalities|tojson }}');
             let isTyping = false;
             
             // Update personality description when selection changes
@@ -373,82 +368,44 @@
                 // Show typing indicator
                 showTypingIndicator();
                 
-                // Simulate server response (replace with actual fetch when backend is ready)
-                setTimeout(() => {
+                // Send message to server
+                fetch('/send_message', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        language: languageSelect.value,
+                        personality: personalitySelect.value,
+                        use_rl: rlToggle.checked
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => {
                     // Remove typing indicator
                     hideTypingIndicator();
                     
-                    // Simulated bot response
-                    const botResponse = generateMockResponse(message);
-                    
                     // Add bot message to chat
-                    addMessageToChat(botResponse.response, 'bot-message', botResponse.emotions, botResponse.personality, botResponse.language);
+                    addMessageToChat(data.response, 'bot-message', data.emotions, data.personality_name, data.language);
                     
                     // Update emotions display
-                    updateRecentEmotions(botResponse.emotions);
+                    updateRecentEmotions(data.emotions);
                     
                     // Enable input
                     userInput.disabled = false;
                     sendButton.disabled = false;
                     userInput.focus();
-                }, 1000);
-            }
-            
-            function generateMockResponse(userMessage) {
-                // Basic emotion detection simulation
-                const emotions = detectEmotions(userMessage);
-                
-                // Personality-based responses
-                const responses = {
-                    default: [
-                        "That's interesting! Tell me more.",
-                        "I see. How does that make you feel?",
-                        "Thank you for sharing that with me."
-                    ],
-                    friendly: [
-                        "Wow, I totally get what you mean!",
-                        "You're awesome for opening up like this!",
-                        "I'm here for you, always ready to listen!"
-                    ],
-                    professional: [
-                        "I appreciate you providing that context.",
-                        "Let's analyze this situation carefully.",
-                        "Your perspective is valuable."
-                    ],
-                    creative: [
-                        "That reminds me of a fascinating story...",
-                        "Imagine if we looked at this from a different angle!",
-                        "Your words paint quite a picture."
-                    ]
-                };
-                
-                const personality = personalitySelect.value;
-                const currentLanguage = languageSelect.value;
-                
-                return {
-                    response: responses[personality][Math.floor(Math.random() * responses[personality].length)],
-                    emotions: emotions,
-                    personality: personalities.find(p => p.id === personality).name,
-                    language: currentLanguage.charAt(0).toUpperCase() + currentLanguage.slice(1)
-                };
-            }
-            
-            function detectEmotions(message) {
-                // Basic emotion detection logic
-                const lowerMessage = message.toLowerCase();
-                const emotionMap = {
-                    happy: ['happy', 'good', 'great', 'awesome', 'excited', 'joy', 'wonderful'],
-                    sad: ['sad', 'upset', 'down', 'depressed', 'unhappy', 'miserable'],
-                    angry: ['angry', 'mad', 'furious', 'irritated', 'annoyed', 'frustrated'],
-                };
-                
-                for (const [emotion, keywords] of Object.entries(emotionMap)) {
-                    if (keywords.some(keyword => lowerMessage.includes(keyword))) {
-                        return [emotion.charAt(0).toUpperCase() + emotion.slice(1)];
-                    }
-                }
-                
-                return ['Neutral'];
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    hideTypingIndicator();
+                    userInput.disabled = false;
+                    sendButton.disabled = false;
+                    
+                    // Add error message
+                    addMessageToChat('Sorry, there was an error processing your message. Please try again.', 'bot-message');
+                });
             }
             
             function addMessageToChat(message, messageClass, emotions = [], personality = null, language = null) {
@@ -472,11 +429,11 @@
                     
                     if (language) {
                         const languageSpan = document.createElement('span');
-                        languageSpan.textContent = language;
+                        languageSpan.textContent = language.charAt(0).toUpperCase() + language.slice(1);
                         infoDiv.appendChild(languageSpan);
                         
                         // Update the displayed language
-                        botLanguage.textContent = language;
+                        botLanguage.textContent = language.charAt(0).toUpperCase() + language.slice(1);
                     }
                     
                     messageElement.appendChild(infoDiv);
@@ -544,59 +501,103 @@
                 }
             }
             
-            function clearChat() {
-                // Clear chat messages
-                const initialMessage = chatMessages.querySelector('.bot-message.message');
-                chatMessages.innerHTML = '';
-                chatMessages.appendChild(initialMessage);
-                
-                // Clear recent emotions
-                recentEmotions.innerHTML = '<p>No emotions detected yet.</p>';
-            }
-            
             function loadLearningStats() {
-                // Simulated learning stats
-                const stats = {
-                    total_interactions: Math.floor(Math.random() * 1000),
-                    average_reward: (Math.random() * 10).toFixed(2),
-                    patterns_learned: Math.floor(Math.random() * 500),
-                    success_rate: (Math.random() * 100).toFixed(2)
-                };
-                
-                const statsHtml = `
-                    <div class="stats-item">
-                        <strong>Total Interactions:</strong> ${stats.total_interactions}
-                    </div>
-                    <div class="stats-item">
-                        <strong>Average Reward:</strong> ${stats.average_reward}
-                    </div>
-                    <div class="stats-item">
-                        <strong>Patterns Learned:</strong> ${stats.patterns_learned}
-                    </div>
-                    <div class="stats-item">
-                        <strong>Success Rate:</strong> ${stats.success_rate}%
-                    </div>
-                `;
-                
-                learningStats.innerHTML = statsHtml;
+                fetch('/get_learning_stats')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const stats = data.stats;
+                        let statsHtml = `
+                            <div class="stats-item">
+                                <strong>Total Interactions:</strong> ${stats.total_interactions}
+                            </div>
+                            <div class="stats-item">
+                                <strong>Average Reward:</strong> ${stats.average_reward}
+                            </div>
+                            <div class="stats-item">
+                                <strong>Patterns Learned:</strong> ${stats.patterns_learned}
+                            </div>
+                            <div class="stats-item">
+                                <strong>Success Rate:</strong> ${stats.success_rate}%
+                            </div>
+                        `;
+                        
+                        if (stats.top_transitions && stats.top_transitions.length > 0) {
+                            statsHtml += `<div class="stats-item"><strong>Top Emotional Transitions:</strong><ul>`;
+                            stats.top_transitions.forEach(transition => {
+                                statsHtml += `<li>${transition.transition} (${transition.count} times)</li>`;
+                            });
+                            statsHtml += `</ul></div>`;
+                        }
+                        
+                        learningStats.innerHTML = statsHtml;
+                    } else {
+                        learningStats.innerHTML = `<div class="alert alert-danger">Error: ${data.error}</div>`;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    learningStats.innerHTML = '<div class="alert alert-danger">Failed to load learning statistics.</div>';
+                });
             }
             
             function resetLearning() {
-                // Simulate resetting learning stats
-                loadLearningStats();
+                if (!confirm('Are you sure you want to reset all learning data? This cannot be undone.')) {
+                    return;
+                }
                 
-                // Show a temporary message
-                const originalContent = learningStats.innerHTML;
-                learningStats.innerHTML = `
-                    <div class="alert alert-success">
-                        Learning data has been reset.
-                    </div>
-                `;
+                resetLearningBtn.disabled = true;
+                resetLearningBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Resetting...';
                 
-                // Revert back to stats after 2 seconds
-                setTimeout(() => {
-                    learningStats.innerHTML = originalContent;
-                }, 2000);
+                fetch('/reset_learning', {
+                    method: 'POST',
+                })
+                .then(response => response.json())
+                .then(data => {
+                    resetLearningBtn.disabled = false;
+                    resetLearningBtn.innerHTML = '<i class="bi bi-trash"></i> Reset Learning';
+                    
+                    if (data.success) {
+                        alert('Learning data has been reset successfully.');
+                        loadLearningStats();
+                    } else {
+                        alert(`Error: ${data.error}`);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    resetLearningBtn.disabled = false;
+                    resetLearningBtn.innerHTML = '<i class="bi bi-trash"></i> Reset Learning';
+                    alert('Failed to reset learning data.');
+                });
+            }
+            
+            function clearChat() {
+                if (!confirm('Are you sure you want to clear the chat?')) {
+                    return;
+                }
+                
+                fetch('/clear_chat', {
+                    method: 'POST',
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Clear chat messages except for the first welcome message
+                        const welcomeMessage = chatMessages.firstElementChild;
+                        chatMessages.innerHTML = '';
+                        if (welcomeMessage) {
+                            chatMessages.appendChild(welcomeMessage);
+                        }
+                        
+                        // Clear recent emotions
+                        recentEmotions.innerHTML = '<p>No emotions detected yet.</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to clear chat history.');
+                });
             }
         });
     </script>
