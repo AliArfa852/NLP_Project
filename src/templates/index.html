@@ -207,22 +207,26 @@
                         </div>
                     </div>
                 </div>
-                <div class="input-group">
-                    <input type="text" id="userInput" class="form-control" placeholder="Type a message...">
-                    <button id="speechButton" class="btn btn-outline-secondary">
-                        <i class="bi bi-mic"></i>
-                    </button>
-                    <button id="sendButton" class="btn btn-primary">
-                        <i class="bi bi-send"></i> Send
-                    </button>
-                </div>
+                
                 <div class="chat-input">
+                    <!-- Add this in the input-group in index.html, before the Send button -->
+<!-- This can be added around line 400, inside the input-group div -->
+
                     <div class="input-group">
+                        <input type="text" id="userInput" class="form-control" placeholder="Type a message...">
+                        <button id="speechButton" class="btn btn-outline-secondary"> Voice
+                            <i class="bi bi-mic"></i>
+                        </button>
+                        <button id="sendButton" class="btn btn-primary">
+                            <i class="bi bi-send"></i> send
+                        </button>
+                    </div>
+                    <!-- <div class="input-group">
                         <input type="text" id="userInput" class="form-control" placeholder="Type a message...">
                         <button id="sendButton" class="btn btn-primary">
                             <i class="bi bi-send"></i> Send
                         </button>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <div class="col-md-4">
@@ -324,19 +328,6 @@
             // Initialize
             const personalities = JSON.parse('{{ personalities|tojson }}');
             let isTyping = false;
-            
-            // Update personality description when selection changes
-            personalitySelect.addEventListener('change', function() {
-                const selectedPersonality = personalities.find(p => p.id === this.value);
-                if (selectedPersonality) {
-                    personalityDescription.textContent = selectedPersonality.description;
-                }
-            });
-            // Add this to your JavaScript to enable speech recognition
-            // This can be added to the document.addEventListener('DOMContentLoaded', function() {...}) 
-            // section in your index.html
-
-            // Initialize speech recognition
             const speechButton = document.getElementById('speechButton');
             let recognition;
 
@@ -447,6 +438,13 @@
                 }
                 console.log('Speech recognition is not supported in this browser.');
             }
+            // Update personality description when selection changes
+            personalitySelect.addEventListener('change', function() {
+                const selectedPersonality = personalities.find(p => p.id === this.value);
+                if (selectedPersonality) {
+                    personalityDescription.textContent = selectedPersonality.description;
+                }
+            });
             
             // Toggle settings panel
             settingsToggle.addEventListener('click', function() {
