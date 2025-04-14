@@ -1,0 +1,13 @@
+@echo off
+echo Starting Multilingual Emotion Chatbot...
+echo Checking if Ollama is running...
+curl -s http://localhost:11434/api/version >nul 2>&1
+if %ERRORLEVEL% NEQ 0 (
+    echo Ollama is not running. Starting Ollama...
+    start "Ollama Server" cmd /c ollama serve
+    echo Waiting for Ollama to start...
+    timeout /t 5 /nobreak >nul
+)
+call .venv\Scripts\activate
+python src\pipeline.py
+pause

@@ -122,7 +122,7 @@ def get_venv_pip():
 def activate_venv_command():
     """Get the command to activate the virtual environment."""
     if platform.system().lower() == "windows":
-        return f"call {os.path.abspath('.venv\\Scripts\\activate.bat')}"
+        return f"call {os.path.abspath('.venv/Scripts/activate.bat')}"
     else:
         return f"source {os.path.abspath('.venv/bin/activate')}"
 
