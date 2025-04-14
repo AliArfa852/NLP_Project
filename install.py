@@ -157,10 +157,10 @@ def install_vosk_models():
     
     # List of models to install
     models = [
-        {"name": "vosk-model-small-en-us", "description": "English US (small)"},
-        {"name": "vosk-model-en-in-0.4", "description": "English India (for Roman Urdu)"},
-        {"name": "vosk-model-small-hi", "description": "Hindi (small)"},
-        {"name": "vosk-model-small-pa", "description": "Punjabi (small)"}
+        {"name": "vosk-model-small-en-us-0.15", "description": "English US (small)"},
+        {"name": "vosk-model-small-en-in-0.4", "description": "English India (for Roman Urdu)"},
+        {"name": "vosk-model-small-hi-0.22", "description": "Hindi (small)"},
+        {"name": "vosk-model-small-hi-0.22", "description": "Punjabi (small)"}
     ]
     
     success_count = 0
