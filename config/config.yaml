@@ -6,7 +6,7 @@ mongodb:
 
 # LLM Configuration
 llm:
-  model_name: "qwen2:1.5b"
+  model_name: "gemma:2b"
   # Alternative models
   # model_name: "gemma:2b"
   #model_name: "deepseek-r1:latest"
@@ -18,17 +18,78 @@ ollama:
 speech:
   # Text-to-Speech (TTS)
   tts:
+    # TTS engine options
+    
+    text_processing:
+      remove_chars: ["'", "\"", "`", "#", "@", "*"]  # Characters to always remove
+      keep_chars: [".", ",", "!", "?", ";", ":", "-"]  # Punctuation to preserve
+      max_punctuation: 2  # Max consecutive punctuation marks to allow
+    voice_preferences:
+      english_female: "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Speech\\Voices\\Tokens\\TTS_MS_EN-US_ZIRA_11.0"
+      english_male: "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Speech\\Voices\\Tokens\\TTS_MS_EN-US_DAVID_11.0"
     engine: "pyttsx3"  # Options: "pyttsx3", "StyleTTS2", "Whisper Turbo"
     output_path: "./outputs/speech/"
-    # Voice settings for pyttsx3
-    rate: 150  # Speed of speech 
-    volume: 1.0  # Volume (0.0 to 1.0)
+    
+    # Core voice settings
+    base_rate: 190      # Normal speech rate (words per minute)
+    base_volume: 1.0    # Volume (0.0 to 1.0)
+    default_gender: "female"  # Default voice gender
+    
+    # Human-like speech parameters
+    human_like:
+      enabled: true
+      # Pause durations in seconds (base values)
+      pause_durations:
+        comma: 0.2
+        period: 0.3
+        question: 0.5
+        exclamation: 0.4
+      variation_range: 0.2    # +/- range for random variation (0.0-1.0)
+      emphasis:
+        probability: 0.6      # Chance to emphasize important words
+        min_word_length: 5    # Minimum word length to consider
+        level: "moderate"     # Emphasis level: "weak", "moderate", "strong"
+    
+    # Voice profiles for different roles
+    voice_profiles:
+      default:
+        gender: "female"
+        rate_modifier: 1.0
+        pitch_modifier: 1.0
+      call_center:
+        gender: "female"
+        rate_modifier: 1.1
+        pitch_modifier: 1.05
+      tech_support:
+        gender: "male"
+        rate_modifier: 0.95
+        pitch_modifier: 0.9
+      emotional:
+        gender: "female"
+        rate_modifier: 1.0
+        pitch_modifier: 1.1
+    
+    # Conversation state adjustments
+    state_adjustments:
+      rate_modifiers:
+        neutral: 1.0
+        question: 0.9
+        emphasis: 0.85
+        explaining: 0.8
+        excited: 1.2
+      volume_modifiers:
+        neutral: 1.0
+        emphasis: 1.2
+        question: 1.1
+        explaining: 1.0
+        excited: 1.15
   
   # Speech-to-Text (STT)
   stt:
     engine: "vosk"  # Options: "vosk", "whisper-local"
     model_path: "./models/vosk/"  # Path to Vosk models
 
+# Personality Configuration
 personality:
   default: "default"
   
@@ -38,48 +99,36 @@ language:
   supported: ["urdu", "english", "hindi", "punjabi"]  # Supported languages
   # Model paths for different languages (for Vosk STT)
   models:
-    urdu: "vosk-model-small-hi-0.22"  # Using Indian English model for Roman Urdu
+    urdu: "vosk-model-small-hi-0.22"
     english: "vosk-model-small-en-us-0.15"
     hindi: "vosk-model-small-hi-0.22"
-    punjabi: "vosk-model-smalls-hi-0.22"  # Updated Punjabi model
-    indian_english: "vosk-model-small-en-in-0.4"  # Added Indian English model
+    punjabi: "vosk-model-smalls-hi-0.22"
+    indian_english: "vosk-model-small-en-in-0.4"
 
-# Reinforcement Learning Configuration
 # Reinforcement Learning Configuration
 rl:
   learning_rate: 0.001
-  gamma: 0.95  # Discount factor for future rewards
-  epsilon: 0.2  # Exploration rate (probability of trying new responses)
-  enabled: true  # Whether RL is enabled by default
-  
-  # Emotion Reward Settings
+  gamma: 0.95
+  epsilon: 0.2
+  enabled: true
   rewards:
-    # Rewards for emotional transitions (from -> to)
     transitions:
-      # From neutral
       neutral_to_neutral: 0.1
       neutral_to_happy: 0.7
       neutral_to_sad: -0.3
       neutral_to_angry: -0.5
-      
-      # From happy
       happy_to_happy: 0.5
       happy_to_neutral: 0.0
       happy_to_sad: -0.7
       happy_to_angry: -0.8
-      
-      # From sad
       sad_to_happy: 0.8
       sad_to_neutral: 0.5
       sad_to_sad: -0.2
       sad_to_angry: -0.5
-      
-      # From angry
       angry_to_happy: 0.9
       angry_to_neutral: 0.7
       angry_to_sad: -0.1
       angry_to_angry: -0.6
-
 
 # Data Configuration
 data:

@@ -11,6 +11,7 @@ import requests
 import sys
 from pymongo import MongoClient
 from pathlib import Path
+import re
 
 # Add parent directory to path for importing modules
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -70,6 +71,76 @@ class EmotionDetector:
             print(f"Language {language} not supported")
             return False
     
+    # def detect_emotion(self, text):
+    #     """
+    #     Detect emotions in the provided text.
+        
+    #     Args:
+    #         text: User input text
+            
+    #     Returns:
+    #         List of detected emotions with labels and scores
+    #     """
+    #     if not text or not text.strip():
+    #         return [{'label': 'neutral', 'score': 1.0}]
+        
+    #     # For Roman Urdu detection
+    #     original_text = text
+    #     if self.language == "urdu" and self.use_transliteration:
+    #         # Detect if we need to transliterate
+    #         lang_type = detect_language(text)
+    #         if lang_type == "urdu_script":
+    #             # Convert to Roman Urdu for better processing
+    #             text = urdu_to_roman(text)
+    #             print(f"Converted Urdu text to Roman Urdu: {text}")
+        
+    #     # Prepare prompt for emotion detection based on language
+    #     prompt = self._create_emotion_detection_prompt(text)
+        
+    #     # Send request to the Ollama API
+    #     payload = {
+    #         "model": self.model_name,
+    #         "prompt": prompt,
+    #         "temperature": 0.1,  # Lower temperature for more deterministic results
+    #         "num_predict": 50,   # Limit token generation
+    #         "stream": False      # Disable streaming for simpler handling
+    #     }
+        
+    #     try:
+    #         # Send request to the Ollama API
+    #         response = requests.post(self.api_endpoint, json=payload)
+            
+    #         if response.status_code != 200:
+    #             print(f"Error from Ollama API: {response.text}")
+    #             return [{'label': 'neutral', 'score': 1.0}]  # Default to neutral on error
+            
+    #         # Extract and parse emotion from response
+    #         response_data = response.json()
+    #         response_text = response_data.get('response', '').strip().lower()
+            
+    #         # Handle various response formats
+    #         detected_emotions = []
+            
+    #         for emotion in self.supported_emotions:
+    #             if emotion in response_text:
+    #                 detected_emotions.append({
+    #                     'label': emotion,
+    #                     'score': 0.9  # Arbitrary high score since Ollama doesn't provide scores
+    #                 })
+            
+    #         # If no emotions detected, default to neutral
+    #         if not detected_emotions:
+    #             if 'neutral' not in response_text:
+    #                 detected_emotions.append({'label': 'neutral', 'score': 0.7})
+    #             else:
+    #                 detected_emotions.append({'label': 'neutral', 'score': 0.9})
+            
+    #         return detected_emotions
+            
+    #     except Exception as e:
+    #         print(f"Error in emotion detection: {str(e)}")
+    #         return [{'label': 'neutral', 'score': 1.0}]  # Default to neutral on error
+    
     def detect_emotion(self, text):
         """
         Detect emotions in the provided text.
@@ -83,69 +154,76 @@ class EmotionDetector:
         if not text or not text.strip():
             return [{'label': 'neutral', 'score': 1.0}]
         
-        # For Roman Urdu detection
+        # Handle language conversion if needed
         original_text = text
         if self.language == "urdu" and self.use_transliteration:
-            # Detect if we need to transliterate
             lang_type = detect_language(text)
             if lang_type == "urdu_script":
-                # Convert to Roman Urdu for better processing
                 text = urdu_to_roman(text)
-                print(f"Converted Urdu text to Roman Urdu: {text}")
         
-        # Prepare prompt for emotion detection based on language
+        # Prepare prompt
         prompt = self._create_emotion_detection_prompt(text)
         
-        # Send request to the Ollama API
+        # API payload
         payload = {
             "model": self.model_name,
             "prompt": prompt,
-            "temperature": 0.1,  # Lower temperature for more deterministic results
-            "num_predict": 50,   # Limit token generation
-            "stream": False      # Disable streaming for simpler handling
+            "temperature": 0.1,
+            "num_predict": 50,
+            "stream": False
         }
         
         try:
-            # Send request to the Ollama API
-            response = requests.post(self.api_endpoint, json=payload)
-            
-            if response.status_code != 200:
-                print(f"Error from Ollama API: {response.text}")
-                return [{'label': 'neutral', 'score': 1.0}]  # Default to neutral on error
-            
-            # Extract and parse emotion from response
+            response = requests.post(self.api_endpoint, json=payload, timeout=30)
+            response.raise_for_status()
             response_data = response.json()
+            
+            # Get and clean response
             response_text = response_data.get('response', '').strip().lower()
+            response_text = response_text.split('\n')[0].strip('.').strip()
             
-            # Handle various response formats
+            # First try exact match
             detected_emotions = []
+            if response_text in self.supported_emotions:
+                detected_emotions.append({
+                    'label': response_text,
+                    'score': 0.9
+                })
+            else:
+                # Fallback to word matching
+                for emotion in self.supported_emotions:
+                    # Check for whole words only
+                    if re.search(rf'\b{emotion}\b', response_text):
+                        detected_emotions.append({
+                            'label': emotion,
+                            'score': 0.7
+                        })
             
-            for emotion in self.supported_emotions:
-                if emotion in response_text:
-                    detected_emotions.append({
-                        'label': emotion,
-                        'score': 0.9  # Arbitrary high score since Ollama doesn't provide scores
-                    })
+            # Apply confidence threshold
+            MIN_CONFIDENCE = 0.6
+            detected_emotions = [e for e in detected_emotions if e['score'] >= MIN_CONFIDENCE]
             
-            # If no emotions detected, default to neutral
+            # If nothing meets threshold, return neutral
             if not detected_emotions:
-                if 'neutral' not in response_text:
-                    detected_emotions.append({'label': 'neutral', 'score': 0.7})
-                else:
-                    detected_emotions.append({'label': 'neutral', 'score': 0.9})
+                detected_emotions.append({'label': 'neutral', 'score': 1.0})
+            
+            # If we got multiple matches but should have only one, take the first
+            if len(detected_emotions) > 1:
+                detected_emotions = [detected_emotions[0]]
             
             return detected_emotions
             
         except Exception as e:
             print(f"Error in emotion detection: {str(e)}")
-            return [{'label': 'neutral', 'score': 1.0}]  # Default to neutral on error
-    
+            return [{'label': 'neutral', 'score': 1.0}]
+        
+
     def _create_emotion_detection_prompt(self, text):
         """Create a prompt for emotion detection based on the current language."""
         # Multilingual prompts
         prompts = {
             'english': f"""
-Analyze the following text and detect the primary emotion.
+Analyze the following text and detect the primary emotion and make the answer the tag only 
 Text: "{text}"
 Choose exactly one emotion from these options: happy, sad, neutral, angry.
 Only respond with the emotion name, nothing else:

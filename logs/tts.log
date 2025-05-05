@@ -1,0 +1,215 @@
+2025-05-05 22:41:03,140 - comtypes.client._code_cache - INFO - Imported existing <module 'comtypes.gen' from 'C:\\Users\\aliar\\Documents\\sem8\\GenAi\\project\\NLP_Project\\.venv\\Lib\\site-packages\\comtypes\\gen\\__init__.py'>
+2025-05-05 22:41:03,141 - comtypes.client._code_cache - INFO - Using writeable comtypes cache directory: 'C:\Users\aliar\Documents\sem8\GenAi\project\NLP_Project\.venv\Lib\site-packages\comtypes\gen'
+2025-05-05 22:41:03,501 - __main__ - ERROR - Failed to initialize TTS engine: 'TextToSpeech' object has no attribute 'voice_gender'
+2025-05-05 22:42:01,660 - comtypes.client._code_cache - INFO - Imported existing <module 'comtypes.gen' from 'C:\\Users\\aliar\\Documents\\sem8\\GenAi\\project\\NLP_Project\\.venv\\Lib\\site-packages\\comtypes\\gen\\__init__.py'>
+2025-05-05 22:42:01,670 - comtypes.client._code_cache - INFO - Using writeable comtypes cache directory: 'C:\Users\aliar\Documents\sem8\GenAi\project\NLP_Project\.venv\Lib\site-packages\comtypes\gen'
+2025-05-05 22:42:01,869 - __main__ - ERROR - Failed to initialize TTS engine: 'TextToSpeech' object has no attribute 'voice_gender'
+2025-05-05 22:49:28,704 - __main__ - INFO - Configuration loaded successfully
+2025-05-05 22:49:28,704 - __main__ - INFO - Voice profile loaded - Gender: female, Rate Mod: 1.1, Pitch Mod: 1.05
+2025-05-05 22:49:28,780 - comtypes.client._code_cache - INFO - Imported existing <module 'comtypes.gen' from 'C:\\Users\\aliar\\Documents\\sem8\\GenAi\\project\\NLP_Project\\.venv\\Lib\\site-packages\\comtypes\\gen\\__init__.py'>
+2025-05-05 22:49:28,780 - comtypes.client._code_cache - INFO - Using writeable comtypes cache directory: 'C:\Users\aliar\Documents\sem8\GenAi\project\NLP_Project\.venv\Lib\site-packages\comtypes\gen'
+2025-05-05 22:49:28,965 - __main__ - INFO - Selected voice: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_DAVID_11.0
+2025-05-05 22:49:28,965 - __main__ - INFO - Initialized TTS engine for call_center role in english
+2025-05-05 22:49:28,967 - __main__ - INFO - Available voices:
+2025-05-05 22:49:28,968 - __main__ - INFO - 1. ID: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_DAVID_11.0
+2025-05-05 22:49:28,968 - __main__ - INFO -    Name: Microsoft David Desktop - English (United States)
+2025-05-05 22:49:28,968 - __main__ - INFO -    Languages: []
+2025-05-05 22:49:28,968 - __main__ - INFO -    Gender: None
+2025-05-05 22:49:28,969 - __main__ - INFO - 2. ID: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0
+2025-05-05 22:49:28,969 - __main__ - INFO -    Name: Microsoft Zira Desktop - English (United States)
+2025-05-05 22:49:28,969 - __main__ - INFO -    Languages: []
+2025-05-05 22:49:28,970 - __main__ - INFO -    Gender: None
+2025-05-05 22:49:28,971 - __main__ - INFO - Adjusted speech for state 'neutral': rate=165.0, volume=1.0
+2025-05-05 22:49:42,151 - __main__ - INFO - Adjusted speech for state 'question': rate=148.5, volume=1.1
+2025-05-05 22:49:54,803 - __main__ - INFO - Adjusted speech for state 'emphasis': rate=140.25, volume=1.2
+2025-05-05 22:50:08,138 - __main__ - INFO - Adjusted speech for state 'explaining': rate=132.0, volume=1.0
+2025-05-05 22:50:21,705 - __main__ - INFO - Saved speech to ./outputs/speech/test_output.wav
+2025-05-05 22:51:44,277 - __main__ - INFO - Configuration loaded successfully
+2025-05-05 22:51:44,277 - __main__ - INFO - Voice profile loaded - Gender: female, Rate Mod: 1.1, Pitch Mod: 1.05
+2025-05-05 22:51:44,355 - comtypes.client._code_cache - INFO - Imported existing <module 'comtypes.gen' from 'C:\\Users\\aliar\\Documents\\sem8\\GenAi\\project\\NLP_Project\\.venv\\Lib\\site-packages\\comtypes\\gen\\__init__.py'>
+2025-05-05 22:51:44,356 - comtypes.client._code_cache - INFO - Using writeable comtypes cache directory: 'C:\Users\aliar\Documents\sem8\GenAi\project\NLP_Project\.venv\Lib\site-packages\comtypes\gen'
+2025-05-05 22:51:44,551 - __main__ - INFO - Selected voice: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_DAVID_11.0
+2025-05-05 22:51:44,551 - __main__ - INFO - Initialized TTS engine for call_center role in english
+2025-05-05 22:51:44,553 - __main__ - INFO - Available voices:
+2025-05-05 22:51:44,554 - __main__ - INFO - 1. ID: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_DAVID_11.0
+2025-05-05 22:51:44,554 - __main__ - INFO -    Name: Microsoft David Desktop - English (United States)
+2025-05-05 22:51:44,554 - __main__ - INFO -    Languages: []
+2025-05-05 22:51:44,554 - __main__ - INFO -    Gender: None
+2025-05-05 22:51:44,555 - __main__ - INFO - 2. ID: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0
+2025-05-05 22:51:44,555 - __main__ - INFO -    Name: Microsoft Zira Desktop - English (United States)
+2025-05-05 22:51:44,555 - __main__ - INFO -    Languages: []
+2025-05-05 22:51:44,555 - __main__ - INFO -    Gender: None
+2025-05-05 22:51:44,556 - __main__ - INFO - Adjusted speech for state 'neutral': rate=165.0, volume=1.0
+2025-05-05 22:51:57,453 - __main__ - INFO - Adjusted speech for state 'question': rate=148.5, volume=1.1
+2025-05-05 22:52:10,097 - __main__ - INFO - Adjusted speech for state 'emphasis': rate=140.25, volume=1.2
+2025-05-05 22:52:23,504 - __main__ - INFO - Adjusted speech for state 'explaining': rate=132.0, volume=1.0
+2025-05-05 22:52:37,120 - __main__ - INFO - Saved speech to ./outputs/speech/test_output.wav
+2025-05-05 22:54:07,136 - models.speech.text_to_speech - INFO - Configuration loaded successfully
+2025-05-05 22:54:07,137 - models.speech.text_to_speech - INFO - Voice profile loaded - Gender: female, Rate Mod: 1.0, Pitch Mod: 1.0
+2025-05-05 22:54:07,184 - comtypes.client._code_cache - INFO - Imported existing <module 'comtypes.gen' from 'C:\\Users\\aliar\\Documents\\sem8\\GenAi\\project\\NLP_Project\\.venv\\Lib\\site-packages\\comtypes\\gen\\__init__.py'>
+2025-05-05 22:54:07,185 - comtypes.client._code_cache - INFO - Using writeable comtypes cache directory: 'C:\Users\aliar\Documents\sem8\GenAi\project\NLP_Project\.venv\Lib\site-packages\comtypes\gen'
+2025-05-05 22:54:07,379 - models.speech.text_to_speech - INFO - Selected voice: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_DAVID_11.0
+2025-05-05 22:54:07,380 - models.speech.text_to_speech - INFO - Initialized TTS engine for default role in english
+2025-05-05 23:06:37,571 - __main__ - INFO - Configuration loaded successfully
+2025-05-05 23:06:37,572 - __main__ - INFO - Voice profile loaded - Gender: female, Rate Mod: 1.1, Pitch Mod: 1.05
+2025-05-05 23:06:37,651 - comtypes.client._code_cache - INFO - Imported existing <module 'comtypes.gen' from 'C:\\Users\\aliar\\Documents\\sem8\\GenAi\\project\\NLP_Project\\.venv\\Lib\\site-packages\\comtypes\\gen\\__init__.py'>
+2025-05-05 23:06:37,651 - comtypes.client._code_cache - INFO - Using writeable comtypes cache directory: 'C:\Users\aliar\Documents\sem8\GenAi\project\NLP_Project\.venv\Lib\site-packages\comtypes\gen'
+2025-05-05 23:06:37,839 - __main__ - INFO - Using preferred voice: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0
+2025-05-05 23:06:37,839 - __main__ - WARNING - Voice gender mismatch! Expected female, got: hkey_local_machine\software\microsoft\speech\voices\tokens\tts_ms_en-us_david_11.0
+2025-05-05 23:06:37,841 - __main__ - INFO - Forcefully set female voice: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0
+2025-05-05 23:06:37,841 - __main__ - INFO - Initialized TTS engine for call_center role in english
+2025-05-05 23:06:37,844 - __main__ - INFO - Available voices:
+2025-05-05 23:06:37,844 - __main__ - INFO - 1. ID: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_DAVID_11.0
+2025-05-05 23:06:37,844 - __main__ - INFO -    Name: Microsoft David Desktop - English (United States)
+2025-05-05 23:06:37,845 - __main__ - INFO -    Languages: []
+2025-05-05 23:06:37,845 - __main__ - INFO -    Gender: None
+2025-05-05 23:06:37,845 - __main__ - INFO - 2. ID: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0
+2025-05-05 23:06:37,845 - __main__ - INFO -    Name: Microsoft Zira Desktop - English (United States)
+2025-05-05 23:06:37,846 - __main__ - INFO -    Languages: []
+2025-05-05 23:06:37,846 - __main__ - INFO -    Gender: None
+2025-05-05 23:06:37,846 - __main__ - INFO - Adjusted speech for state 'neutral': rate=165.0, volume=1.0
+2025-05-05 23:06:50,789 - __main__ - INFO - Adjusted speech for state 'question': rate=148.5, volume=1.1
+2025-05-05 23:07:02,917 - __main__ - INFO - Adjusted speech for state 'emphasis': rate=140.25, volume=1.2
+2025-05-05 23:07:16,010 - __main__ - INFO - Adjusted speech for state 'explaining': rate=132.0, volume=1.0
+2025-05-05 23:07:29,183 - __main__ - INFO - Saved speech to ./outputs/speech/test_output.wav
+2025-05-05 23:09:37,194 - __main__ - INFO - Configuration loaded successfully
+2025-05-05 23:09:37,194 - __main__ - INFO - Voice profile loaded - Gender: female, Rate Mod: 1.1, Pitch Mod: 1.05
+2025-05-05 23:09:37,272 - comtypes.client._code_cache - INFO - Imported existing <module 'comtypes.gen' from 'C:\\Users\\aliar\\Documents\\sem8\\GenAi\\project\\NLP_Project\\.venv\\Lib\\site-packages\\comtypes\\gen\\__init__.py'>
+2025-05-05 23:09:37,272 - comtypes.client._code_cache - INFO - Using writeable comtypes cache directory: 'C:\Users\aliar\Documents\sem8\GenAi\project\NLP_Project\.venv\Lib\site-packages\comtypes\gen'
+2025-05-05 23:09:37,460 - __main__ - INFO - Using preferred voice: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0
+2025-05-05 23:09:37,460 - __main__ - WARNING - Voice gender mismatch! Expected female, got: hkey_local_machine\software\microsoft\speech\voices\tokens\tts_ms_en-us_david_11.0
+2025-05-05 23:09:37,462 - __main__ - INFO - Forcefully set female voice: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0
+2025-05-05 23:09:37,463 - __main__ - INFO - Initialized TTS engine for call_center role in english
+2025-05-05 23:09:37,466 - __main__ - INFO - Available voices:
+2025-05-05 23:09:37,467 - __main__ - INFO - 1. ID: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_DAVID_11.0
+2025-05-05 23:09:37,467 - __main__ - INFO -    Name: Microsoft David Desktop - English (United States)
+2025-05-05 23:09:37,467 - __main__ - INFO -    Languages: []
+2025-05-05 23:09:37,468 - __main__ - INFO -    Gender: None
+2025-05-05 23:09:37,468 - __main__ - INFO - 2. ID: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0
+2025-05-05 23:09:37,468 - __main__ - INFO -    Name: Microsoft Zira Desktop - English (United States)
+2025-05-05 23:09:37,468 - __main__ - INFO -    Languages: []
+2025-05-05 23:09:37,468 - __main__ - INFO -    Gender: None
+2025-05-05 23:09:37,468 - __main__ - INFO - Adjusted speech for state 'neutral': rate=165.0, volume=1.0
+2025-05-05 23:09:49,997 - __main__ - INFO - Adjusted speech for state 'question': rate=148.5, volume=1.1
+2025-05-05 23:10:02,118 - __main__ - INFO - Adjusted speech for state 'emphasis': rate=140.25, volume=1.2
+2025-05-05 23:10:17,986 - __main__ - INFO - Adjusted speech for state 'explaining': rate=132.0, volume=1.0
+2025-05-05 23:10:34,104 - __main__ - INFO - Saved speech to ./outputs/speech/test_output.wav
+2025-05-05 23:10:49,906 - __main__ - INFO - Configuration loaded successfully
+2025-05-05 23:10:49,906 - __main__ - INFO - Voice profile loaded - Gender: female, Rate Mod: 1.1, Pitch Mod: 1.05
+2025-05-05 23:10:49,983 - comtypes.client._code_cache - INFO - Imported existing <module 'comtypes.gen' from 'C:\\Users\\aliar\\Documents\\sem8\\GenAi\\project\\NLP_Project\\.venv\\Lib\\site-packages\\comtypes\\gen\\__init__.py'>
+2025-05-05 23:10:49,984 - comtypes.client._code_cache - INFO - Using writeable comtypes cache directory: 'C:\Users\aliar\Documents\sem8\GenAi\project\NLP_Project\.venv\Lib\site-packages\comtypes\gen'
+2025-05-05 23:10:50,171 - __main__ - INFO - Using preferred voice: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0
+2025-05-05 23:10:50,171 - __main__ - WARNING - Voice gender mismatch! Expected female, got: hkey_local_machine\software\microsoft\speech\voices\tokens\tts_ms_en-us_david_11.0
+2025-05-05 23:10:50,173 - __main__ - INFO - Forcefully set female voice: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0
+2025-05-05 23:10:50,173 - __main__ - INFO - Initialized TTS engine for call_center role in english
+2025-05-05 23:10:50,175 - __main__ - INFO - Available voices:
+2025-05-05 23:10:50,175 - __main__ - INFO - 1. ID: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_DAVID_11.0
+2025-05-05 23:10:50,176 - __main__ - INFO -    Name: Microsoft David Desktop - English (United States)
+2025-05-05 23:10:50,176 - __main__ - INFO -    Languages: []
+2025-05-05 23:10:50,176 - __main__ - INFO -    Gender: None
+2025-05-05 23:10:50,176 - __main__ - INFO - 2. ID: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0
+2025-05-05 23:10:50,176 - __main__ - INFO -    Name: Microsoft Zira Desktop - English (United States)
+2025-05-05 23:10:50,177 - __main__ - INFO -    Languages: []
+2025-05-05 23:10:50,177 - __main__ - INFO -    Gender: None
+2025-05-05 23:10:50,178 - __main__ - INFO - Adjusted speech for state 'neutral': rate=165.0, volume=1.0
+2025-05-05 23:11:02,846 - __main__ - INFO - Adjusted speech for state 'question': rate=148.5, volume=1.1
+2025-05-05 23:11:15,146 - __main__ - INFO - Adjusted speech for state 'emphasis': rate=140.25, volume=1.2
+2025-05-05 23:11:28,325 - __main__ - INFO - Adjusted speech for state 'explaining': rate=132.0, volume=1.0
+2025-05-05 23:11:41,635 - __main__ - INFO - Saved speech to ./outputs/speech/test_output.wav
+2025-05-05 23:12:12,500 - __main__ - INFO - Configuration loaded successfully
+2025-05-05 23:12:12,501 - __main__ - INFO - Voice profile loaded - Gender: female, Rate Mod: 1.1, Pitch Mod: 1.05
+2025-05-05 23:12:12,580 - comtypes.client._code_cache - INFO - Imported existing <module 'comtypes.gen' from 'C:\\Users\\aliar\\Documents\\sem8\\GenAi\\project\\NLP_Project\\.venv\\Lib\\site-packages\\comtypes\\gen\\__init__.py'>
+2025-05-05 23:12:12,581 - comtypes.client._code_cache - INFO - Using writeable comtypes cache directory: 'C:\Users\aliar\Documents\sem8\GenAi\project\NLP_Project\.venv\Lib\site-packages\comtypes\gen'
+2025-05-05 23:12:12,777 - __main__ - INFO - Using preferred voice: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0
+2025-05-05 23:12:12,777 - __main__ - WARNING - Voice gender mismatch! Expected female, got: hkey_local_machine\software\microsoft\speech\voices\tokens\tts_ms_en-us_david_11.0
+2025-05-05 23:12:12,779 - __main__ - INFO - Forcefully set female voice: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0
+2025-05-05 23:12:12,780 - __main__ - INFO - Initialized TTS engine for call_center role in english
+2025-05-05 23:12:12,782 - __main__ - INFO - Available voices:
+2025-05-05 23:12:12,782 - __main__ - INFO - 1. ID: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_DAVID_11.0
+2025-05-05 23:12:12,782 - __main__ - INFO -    Name: Microsoft David Desktop - English (United States)
+2025-05-05 23:12:12,782 - __main__ - INFO -    Languages: []
+2025-05-05 23:12:12,783 - __main__ - INFO -    Gender: None
+2025-05-05 23:12:12,783 - __main__ - INFO - 2. ID: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0
+2025-05-05 23:12:12,783 - __main__ - INFO -    Name: Microsoft Zira Desktop - English (United States)
+2025-05-05 23:12:12,784 - __main__ - INFO -    Languages: []
+2025-05-05 23:12:12,784 - __main__ - INFO -    Gender: None
+2025-05-05 23:12:12,784 - __main__ - INFO - Adjusted speech for state 'neutral': rate=165.0, volume=1.0
+2025-05-05 23:12:12,785 - __main__ - ERROR - Speech synthesis failed: name 'word_to_emphasis' is not defined
+2025-05-05 23:12:12,785 - __main__ - INFO - Adjusted speech for state 'question': rate=148.5, volume=1.1
+2025-05-05 23:12:30,754 - __main__ - INFO - Adjusted speech for state 'emphasis': rate=140.25, volume=1.2
+2025-05-05 23:12:49,444 - __main__ - INFO - Adjusted speech for state 'explaining': rate=132.0, volume=1.0
+2025-05-05 23:12:49,444 - __main__ - ERROR - Speech synthesis failed: name 'word_to_emphasis' is not defined
+2025-05-05 23:12:49,445 - __main__ - ERROR - Speech synthesis failed: name 'word_to_emphasis' is not defined
+2025-05-05 23:18:45,626 - comtypes.client._code_cache - INFO - Imported existing <module 'comtypes.gen' from 'C:\\Users\\aliar\\Documents\\sem8\\GenAi\\project\\NLP_Project\\.venv\\Lib\\site-packages\\comtypes\\gen\\__init__.py'>
+2025-05-05 23:18:45,627 - comtypes.client._code_cache - INFO - Using writeable comtypes cache directory: 'C:\Users\aliar\Documents\sem8\GenAi\project\NLP_Project\.venv\Lib\site-packages\comtypes\gen'
+2025-05-05 23:19:42,982 - comtypes.client._code_cache - INFO - Imported existing <module 'comtypes.gen' from 'C:\\Users\\aliar\\Documents\\sem8\\GenAi\\project\\NLP_Project\\.venv\\Lib\\site-packages\\comtypes\\gen\\__init__.py'>
+2025-05-05 23:19:42,983 - comtypes.client._code_cache - INFO - Using writeable comtypes cache directory: 'C:\Users\aliar\Documents\sem8\GenAi\project\NLP_Project\.venv\Lib\site-packages\comtypes\gen'
+2025-05-05 23:19:58,943 - __main__ - INFO - Configuration loaded successfully
+2025-05-05 23:19:58,944 - __main__ - INFO - Voice profile loaded - Gender: female, Rate Mod: 1.1, Pitch Mod: 1.05
+2025-05-05 23:19:59,031 - comtypes.client._code_cache - INFO - Imported existing <module 'comtypes.gen' from 'C:\\Users\\aliar\\Documents\\sem8\\GenAi\\project\\NLP_Project\\.venv\\Lib\\site-packages\\comtypes\\gen\\__init__.py'>
+2025-05-05 23:19:59,031 - comtypes.client._code_cache - INFO - Using writeable comtypes cache directory: 'C:\Users\aliar\Documents\sem8\GenAi\project\NLP_Project\.venv\Lib\site-packages\comtypes\gen'
+2025-05-05 23:19:59,243 - __main__ - INFO - Using preferred voice: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0
+2025-05-05 23:19:59,243 - __main__ - WARNING - Voice gender mismatch! Expected female, got: hkey_local_machine\software\microsoft\speech\voices\tokens\tts_ms_en-us_david_11.0
+2025-05-05 23:19:59,246 - __main__ - INFO - Forcefully set female voice: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0
+2025-05-05 23:19:59,247 - __main__ - INFO - Initialized TTS engine for call_center role in english
+2025-05-05 23:19:59,249 - __main__ - INFO - Available voices:
+2025-05-05 23:19:59,249 - __main__ - INFO - 1. ID: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_DAVID_11.0
+2025-05-05 23:19:59,250 - __main__ - INFO -    Name: Microsoft David Desktop - English (United States)
+2025-05-05 23:19:59,250 - __main__ - INFO -    Languages: []
+2025-05-05 23:19:59,250 - __main__ - INFO -    Gender: None
+2025-05-05 23:19:59,250 - __main__ - INFO - 2. ID: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0
+2025-05-05 23:19:59,251 - __main__ - INFO -    Name: Microsoft Zira Desktop - English (United States)
+2025-05-05 23:19:59,251 - __main__ - INFO -    Languages: []
+2025-05-05 23:19:59,252 - __main__ - INFO -    Gender: None
+2025-05-05 23:19:59,252 - __main__ - INFO - Adjusted speech for state 'neutral': rate=165.0, volume=1.0
+2025-05-05 23:19:59,253 - __main__ - ERROR - Speech synthesis failed: name 'word_to_emphasis' is not defined
+2025-05-05 23:19:59,253 - __main__ - INFO - Adjusted speech for state 'question': rate=148.5, volume=1.1
+2025-05-05 23:20:17,029 - __main__ - INFO - Adjusted speech for state 'emphasis': rate=140.25, volume=1.2
+2025-05-05 23:20:35,762 - __main__ - INFO - Adjusted speech for state 'explaining': rate=132.0, volume=1.0
+2025-05-05 23:20:35,762 - __main__ - ERROR - Speech synthesis failed: name 'word_to_emphasis' is not defined
+2025-05-05 23:20:35,763 - __main__ - ERROR - Speech synthesis failed: name 'word_to_emphasis' is not defined
+2025-05-05 23:21:23,739 - __main__ - INFO - Configuration loaded successfully
+2025-05-05 23:21:23,740 - __main__ - INFO - Voice profile loaded - Gender: female, Rate Mod: 1.1, Pitch Mod: 1.05
+2025-05-05 23:21:23,822 - comtypes.client._code_cache - INFO - Imported existing <module 'comtypes.gen' from 'C:\\Users\\aliar\\Documents\\sem8\\GenAi\\project\\NLP_Project\\.venv\\Lib\\site-packages\\comtypes\\gen\\__init__.py'>
+2025-05-05 23:21:23,823 - comtypes.client._code_cache - INFO - Using writeable comtypes cache directory: 'C:\Users\aliar\Documents\sem8\GenAi\project\NLP_Project\.venv\Lib\site-packages\comtypes\gen'
+2025-05-05 23:21:24,018 - __main__ - INFO - Using preferred voice: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0
+2025-05-05 23:21:24,018 - __main__ - WARNING - Voice gender mismatch! Expected female, got: hkey_local_machine\software\microsoft\speech\voices\tokens\tts_ms_en-us_david_11.0
+2025-05-05 23:21:24,020 - __main__ - INFO - Forcefully set female voice: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0
+2025-05-05 23:21:24,021 - __main__ - INFO - Initialized TTS engine for call_center role in english
+2025-05-05 23:21:24,023 - __main__ - INFO - Available voices:
+2025-05-05 23:21:24,023 - __main__ - INFO - 1. ID: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_DAVID_11.0
+2025-05-05 23:21:24,023 - __main__ - INFO -    Name: Microsoft David Desktop - English (United States)
+2025-05-05 23:21:24,023 - __main__ - INFO -    Languages: []
+2025-05-05 23:21:24,024 - __main__ - INFO -    Gender: None
+2025-05-05 23:21:24,024 - __main__ - INFO - 2. ID: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0
+2025-05-05 23:21:24,024 - __main__ - INFO -    Name: Microsoft Zira Desktop - English (United States)
+2025-05-05 23:21:24,024 - __main__ - INFO -    Languages: []
+2025-05-05 23:21:24,025 - __main__ - INFO -    Gender: None
+2025-05-05 23:21:24,025 - __main__ - INFO - Adjusted speech for state 'neutral': rate=165.0, volume=1.0
+2025-05-05 23:21:36,405 - __main__ - INFO - Adjusted speech for state 'question': rate=148.5, volume=1.1
+2025-05-05 23:21:47,964 - __main__ - INFO - Adjusted speech for state 'emphasis': rate=140.25, volume=1.2
+2025-05-05 23:22:00,508 - __main__ - INFO - Adjusted speech for state 'explaining': rate=132.0, volume=1.0
+2025-05-05 23:22:16,731 - models.speech.text_to_speech - INFO - Configuration loaded successfully
+2025-05-05 23:22:16,732 - models.speech.text_to_speech - INFO - Voice profile loaded - Gender: female, Rate Mod: 1.0, Pitch Mod: 1.0
+2025-05-05 23:22:16,787 - comtypes.client._code_cache - INFO - Imported existing <module 'comtypes.gen' from 'C:\\Users\\aliar\\Documents\\sem8\\GenAi\\project\\NLP_Project\\.venv\\Lib\\site-packages\\comtypes\\gen\\__init__.py'>
+2025-05-05 23:22:16,788 - comtypes.client._code_cache - INFO - Using writeable comtypes cache directory: 'C:\Users\aliar\Documents\sem8\GenAi\project\NLP_Project\.venv\Lib\site-packages\comtypes\gen'
+2025-05-05 23:22:16,968 - models.speech.text_to_speech - INFO - Using preferred voice: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0
+2025-05-05 23:22:16,969 - models.speech.text_to_speech - WARNING - Voice gender mismatch! Expected female, got: hkey_local_machine\software\microsoft\speech\voices\tokens\tts_ms_en-us_david_11.0
+2025-05-05 23:22:16,970 - models.speech.text_to_speech - INFO - Forcefully set female voice: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0
+2025-05-05 23:22:16,971 - models.speech.text_to_speech - INFO - Initialized TTS engine for default role in english
+2025-05-05 23:26:04,007 - models.speech.text_to_speech - INFO - Configuration loaded successfully
+2025-05-05 23:26:04,008 - models.speech.text_to_speech - INFO - Voice profile loaded - Gender: female, Rate Mod: 1.0, Pitch Mod: 1.0
+2025-05-05 23:26:04,067 - comtypes.client._code_cache - INFO - Imported existing <module 'comtypes.gen' from 'C:\\Users\\aliar\\Documents\\sem8\\GenAi\\project\\NLP_Project\\.venv\\Lib\\site-packages\\comtypes\\gen\\__init__.py'>
+2025-05-05 23:26:04,067 - comtypes.client._code_cache - INFO - Using writeable comtypes cache directory: 'C:\Users\aliar\Documents\sem8\GenAi\project\NLP_Project\.venv\Lib\site-packages\comtypes\gen'
+2025-05-05 23:26:04,257 - models.speech.text_to_speech - INFO - Using preferred voice: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0
+2025-05-05 23:26:04,257 - models.speech.text_to_speech - WARNING - Voice gender mismatch! Expected female, got: hkey_local_machine\software\microsoft\speech\voices\tokens\tts_ms_en-us_david_11.0
+2025-05-05 23:26:04,259 - models.speech.text_to_speech - INFO - Forcefully set female voice: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0
+2025-05-05 23:26:04,259 - models.speech.text_to_speech - INFO - Initialized TTS engine for default role in english
+2025-05-05 23:27:15,728 - models.speech.text_to_speech - INFO - Configuration loaded successfully
+2025-05-05 23:27:15,729 - models.speech.text_to_speech - INFO - Voice profile loaded - Gender: female, Rate Mod: 1.0, Pitch Mod: 1.0
+2025-05-05 23:27:15,785 - comtypes.client._code_cache - INFO - Imported existing <module 'comtypes.gen' from 'C:\\Users\\aliar\\Documents\\sem8\\GenAi\\project\\NLP_Project\\.venv\\Lib\\site-packages\\comtypes\\gen\\__init__.py'>
+2025-05-05 23:27:15,786 - comtypes.client._code_cache - INFO - Using writeable comtypes cache directory: 'C:\Users\aliar\Documents\sem8\GenAi\project\NLP_Project\.venv\Lib\site-packages\comtypes\gen'
+2025-05-05 23:27:15,974 - models.speech.text_to_speech - INFO - Using preferred voice: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0
+2025-05-05 23:27:15,975 - models.speech.text_to_speech - WARNING - Voice gender mismatch! Expected female, got: hkey_local_machine\software\microsoft\speech\voices\tokens\tts_ms_en-us_david_11.0
+2025-05-05 23:27:15,977 - models.speech.text_to_speech - INFO - Forcefully set female voice: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0
+2025-05-05 23:27:15,978 - models.speech.text_to_speech - INFO - Initialized TTS engine for default role in english
