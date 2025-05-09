@@ -372,3 +372,27 @@
 2025-05-06 16:04:34,972 - models.speech.text_to_speech - WARNING - Voice gender mismatch! Expected female, got: hkey_local_machine\software\microsoft\speech\voices\tokens\tts_ms_en-us_david_11.0
 2025-05-06 16:04:34,974 - models.speech.text_to_speech - INFO - Forcefully set female voice: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0
 2025-05-06 16:04:34,974 - models.speech.text_to_speech - INFO - Initialized TTS engine for default role in english
+2025-05-06 20:15:54,254 - models.speech.text_to_speech - INFO - Configuration loaded successfully
+2025-05-06 20:15:54,255 - models.speech.text_to_speech - INFO - Voice profile loaded - Gender: female, Rate Mod: 1.0, Pitch Mod: 1.0
+2025-05-06 20:15:54,835 - comtypes.client._code_cache - INFO - Imported existing <module 'comtypes.gen' from 'C:\\Users\\aliar\\Documents\\sem8\\GenAi\\project\\NLP_Project\\.venv\\Lib\\site-packages\\comtypes\\gen\\__init__.py'>
+2025-05-06 20:15:54,835 - comtypes.client._code_cache - INFO - Using writeable comtypes cache directory: 'C:\Users\aliar\Documents\sem8\GenAi\project\NLP_Project\.venv\Lib\site-packages\comtypes\gen'
+2025-05-06 20:15:55,171 - models.speech.text_to_speech - INFO - Using preferred voice: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0
+2025-05-06 20:15:55,171 - models.speech.text_to_speech - WARNING - Voice gender mismatch! Expected female, got: hkey_local_machine\software\microsoft\speech\voices\tokens\tts_ms_en-us_david_11.0
+2025-05-06 20:15:55,173 - models.speech.text_to_speech - INFO - Forcefully set female voice: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0
+2025-05-06 20:15:55,174 - models.speech.text_to_speech - INFO - Initialized TTS engine for default role in english
+2025-05-06 21:50:33,724 - models.speech.text_to_speech - INFO - Configuration loaded successfully
+2025-05-06 21:50:33,725 - models.speech.text_to_speech - INFO - Voice profile loaded - Gender: female, Rate Mod: 1.0, Pitch Mod: 1.0
+2025-05-06 21:50:33,800 - comtypes.client._code_cache - INFO - Imported existing <module 'comtypes.gen' from 'C:\\Users\\aliar\\Documents\\sem8\\GenAi\\project\\NLP_Project\\.venv\\Lib\\site-packages\\comtypes\\gen\\__init__.py'>
+2025-05-06 21:50:33,800 - comtypes.client._code_cache - INFO - Using writeable comtypes cache directory: 'C:\Users\aliar\Documents\sem8\GenAi\project\NLP_Project\.venv\Lib\site-packages\comtypes\gen'
+2025-05-06 21:50:34,114 - models.speech.text_to_speech - INFO - Using preferred voice: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0
+2025-05-06 21:50:34,115 - models.speech.text_to_speech - WARNING - Voice gender mismatch! Expected female, got: hkey_local_machine\software\microsoft\speech\voices\tokens\tts_ms_en-us_david_11.0
+2025-05-06 21:50:34,119 - models.speech.text_to_speech - INFO - Forcefully set female voice: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0
+2025-05-06 21:50:34,119 - models.speech.text_to_speech - INFO - Initialized TTS engine for default role in english
+2025-05-08 11:32:58,949 - models.speech.text_to_speech - INFO - Configuration loaded successfully
+2025-05-08 11:32:58,949 - models.speech.text_to_speech - INFO - Voice profile loaded - Gender: female, Rate Mod: 1.0, Pitch Mod: 1.0
+2025-05-08 11:32:59,471 - comtypes.client._code_cache - INFO - Imported existing <module 'comtypes.gen' from 'C:\\Users\\aliar\\Documents\\sem8\\GenAi\\project\\NLP_Project\\.venv\\Lib\\site-packages\\comtypes\\gen\\__init__.py'>
+2025-05-08 11:32:59,471 - comtypes.client._code_cache - INFO - Using writeable comtypes cache directory: 'C:\Users\aliar\Documents\sem8\GenAi\project\NLP_Project\.venv\Lib\site-packages\comtypes\gen'
+2025-05-08 11:32:59,819 - models.speech.text_to_speech - INFO - Using preferred voice: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0
+2025-05-08 11:32:59,819 - models.speech.text_to_speech - WARNING - Voice gender mismatch! Expected female, got: hkey_local_machine\software\microsoft\speech\voices\tokens\tts_ms_en-us_david_11.0
+2025-05-08 11:32:59,821 - models.speech.text_to_speech - INFO - Forcefully set female voice: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0
+2025-05-08 11:32:59,821 - models.speech.text_to_speech - INFO - Initialized TTS engine for default role in english
